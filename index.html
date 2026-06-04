@@ -8,49 +8,46 @@
 </head>
 <body>
 
-    <!-- 顶部栏：无论切换前还是切换后，都保持一直显示 -->
     <header class="top-bar">
         <div class="top-brand">
             <h1 class="site-title">D.Kaufman的地图库</h1>
-            <div class="live-date" id="liveDate">2026年6月4日</div>
+            <div class="live-date" id="liveDate">加载中:)</div>
         </div>
         <a href="https://www.zhihu.com/people/dick-80-60" target="_blank" class="zhihu-link">
             知乎：@D.Kaufman ↗
         </a>
     </header>
 
-    <!-- 页面容器 -->
     <div class="wrapper">
         
-        <!-- ================= 主界面：战线分类卡片网格 (图1 风格) ================= -->
+        <div class="breadcrumb" id="breadcrumb">
+            <span class="crumb-item active" id="crumbHome">总览</span>
+            <span class="crumb-separator hidden" id="crumbSep">&gt;</span>
+            <span class="crumb-item hidden" id="crumbDetail">分类名称</span>
+        </div>
+        
         <main class="grid-view" id="gridView">
-            <!-- 这里的卡片由 JavaScript 根据配置自动生成 -->
-        </main>
+            </main>
 
-        <!-- ================= 详情界面：独立看图与历史画廊 (图2 风格) ================= -->
         <main class="detail-view hidden" id="detailView">
             
-            <!-- 返回按钮栏 -->
             <div class="control-header">
                 <button class="back-btn" id="backBtn">← 返回总览</button>
-                <h2 class="current-front-title" id="frontTitle">名称</h2>
+                <h2 class="current-front-title" id="frontTitle">战线名称</h2>
             </div>
 
-            <!-- 中心主图灯箱区域 -->
             <div class="main-lightbox">
                 <button class="arrow-btn left" id="prevMap">‹</button>
                 <div class="viewer-window">
-                    <img id="mainMapViewer" src="" alt="地图加载中:)">
+                    <img id="mainMapViewer" src="" alt="地图加载中或当天无数据:(">
                 </div>
                 <button class="arrow-btn right" id="nextMap">›</button>
             </div>
 
-            <!-- 底部历史时间轴缩略图画廊 -->
             <div class="gallery-timeline-wrapper">
                 <button class="gallery-scroll-btn" id="scrollLeft">‹</button>
                 <div class="gallery-track" id="galleryTrack">
-                    <!-- 缩略图由 JS 动态生成 -->
-                </div>
+                    </div>
                 <button class="gallery-scroll-btn" id="scrollRight">›</button>
             </div>
 
