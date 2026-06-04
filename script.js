@@ -10,7 +10,7 @@ const GLOBAL_RECORDS = [
 ];
 
 // ================= 2. 分类基础配置（完全保持你需要的分类名称） =================
-const maps = [
+const mapdata = [
     {
         id: "north",
         name: "北方",
@@ -70,7 +70,7 @@ function renderGridHome() {
     crumbSep.classList.add("hidden");
     crumbDetail.classList.add("hidden");
 
-    maps.forEach(front => {
+    mapdata.forEach(front => {
         const card = document.createElement("div");
         card.className = "front-card";
         
