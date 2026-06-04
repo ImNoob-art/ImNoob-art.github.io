@@ -4,325 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>D.Kaufman的地图库</title>
-    <style>
-        /* 全局重置与变量定义 */
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        :root {
-            --prussian-blue: #003153;  /* 普鲁士蓝 */
-            --pale-skin: #f7ede2;      /* 浅皮肤色 */
-            --white: #ffffff;
-            --border-color: #dcd1c4;
-        }
-
-        body {
-            font-family: "Helvetica Neue", Helvetica, Arial, "Microsoft YaHei", sans-serif;
-            background-color: #f5f5f5;
-            color: #333333;
-            display: block;
-            min-height: 100vh;
-        }
-
-        /* 顶部导航栏 - 普鲁士蓝背景，白色文字形成鲜明对比 */
-        .top-bar {
-            background-color: var(--prussian-blue);
-            color: var(--white);
-            height: 70px;
-            padding: 0 24px;
-            display: table;
-            width: 100%;
-        }
-
-        .top-bar-cell {
-            display: table-cell;
-            vertical-align: middle;
-        }
-
-        /* 标题样式：首选华文姚体 */
-        .site-title {
-            font-family: "STYaoti", "华文姚体", "SimSun", serif;
-            font-size: 24px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            float: left;
-        }
-
-        /* 知乎账号引流链接样式 */
-        .zhihu-link {
-            float: right;
-            color: var(--white);
-            text-decoration: none;
-            font-size: 14px;
-            background-color: rgba(255, 255, 255, 0.15);
-            padding: 8px 16px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .zhihu-link:hover {
-            background-color: rgba(255, 255, 255, 0.3);
-            border-color: var(--white);
-        }
-
-        /* 主体双栏布局结构 */
-        .main-container {
-            display: table;
-            width: 100%;
-            table-layout: fixed;
-            min-height: calc(100vh - 70px);
-        }
-
-        /* 左侧方向选择栏 - 浅皮肤色 */
-        .sidebar {
-            display: table-cell;
-            width: 260px;
-            background-color: var(--pale-skin);
-            border-right: 1px solid var(--border-color);
-            padding: 24px 16px;
-            vertical-align: top;
-        }
-
-        .sidebar-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--prussian-blue);
-            margin-bottom: 16px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid var(--prussian-blue);
-        }
-
-        .location-menu {
-            list-style: none;
-        }
-
-        .location-item {
-            display: block;
-            padding: 12px 16px;
-            background-color: rgba(255, 255, 255, 0.6);
-            border: 1px solid var(--border-color);
-            margin-bottom: 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            color: #444444;
-            transition: all 0.2s ease;
-        }
-
-        .location-item:hover, .location-item.active {
-            background-color: var(--prussian-blue);
-            color: var(--white);
-            border-color: var(--prussian-blue);
-        }
-
-        /* 右侧主显示区 */
-        .content {
-            display: table-cell;
-            padding: 24px;
-            vertical-align: top;
-            background-color: #fafafa;
-        }
-
-        /* 动态现实时间显示区域 */
-        .date-container {
-            margin-bottom: 20px;
-            padding: 12px 16px;
-            background-color: var(--white);
-            border-left: 4px solid var(--prussian-blue);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .date-label {
-            font-size: 13px;
-            color: #666666;
-            margin-bottom: 4px;
-        }
-
-        .date-value {
-            font-size: 20px;
-            font-weight: bold;
-            color: var(--prussian-blue);
-        }
-
-        /* 区域主标题 */
-        .panel-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: var(--prussian-blue);
-            margin-bottom: 16px;
-            border-bottom: 2px solid var(--prussian-blue);
-            padding-bottom: 6px;
-        }
-
-        /* 地图图框框架 */
-        .map-card {
-            background-color: var(--white);
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            padding: 16px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.04);
-            text-align: center;
-        }
-
-        .map-container {
-            width: 100%;
-            background-color: #eaeaea;
-            border-radius: 4px;
-            overflow: hidden;
-            border: 1px solid #dddddd;
-            margin-bottom: 12px;
-        }
-
-        .map-image {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-        }
-
-        /* 每张地图下方显示的专属名称标签 */
-        .map-name-tag {
-            font-size: 16px;
-            font-weight: bold;
-            color: var(--white);
-            background-color: var(--prussian-blue);
-            padding: 8px 16px;
-            display: inline-block;
-            border-radius: 4px;
-            letter-spacing: 1px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- 顶部栏：无论切换前还是切换后，都保持一直显示 -->
     <header class="top-bar">
-        <div class="top-bar-cell">
+        <div class="top-brand">
             <h1 class="site-title">D.Kaufman的地图库</h1>
-            <a href="https://www.zhihu.com/people/dick-80-60" target="_blank" class="zhihu-link">
-                知乎：@D.Kaufman ↗
-            </a>
+            <div class="live-date" id="liveDate">2026年6月4日</div>
         </div>
+        <a href="https://www.zhihu.com/people/dick-80-60" target="_blank" class="zhihu-link">
+            知乎：@D.Kaufman ↗
+        </a>
     </header>
 
-    <div class="main-container">
+    <!-- 页面容器 -->
+    <div class="wrapper">
         
-        <aside class="sidebar">
-            <h2 class="sidebar-title">分类</h2>
-            <ul class="location-menu" id="locationList">
-                </ul>
-        </aside>
+        <!-- ================= 主界面：战线分类卡片网格 (图1 风格) ================= -->
+        <main class="grid-view" id="gridView">
+            <!-- 这里的卡片由 JavaScript 根据配置自动生成 -->
+        </main>
 
-        <main class="content">
-            <div class="date-container">
-                <div class="date-label">记录日</div>
-                <div class="date-value" id="liveDate">加载中:)</div>
-            </div>
-
-            <h2 class="panel-title" id="panelTitle">总览</h2>
+        <!-- ================= 详情界面：独立看图与历史画廊 (图2 风格) ================= -->
+        <main class="detail-view hidden" id="detailView">
             
-            <div class="map-card">
-                <div class="map-container">
-                    <img id="mapViewer" class="map-image" src="" alt="当前方向暂未更新">
-                </div>
-                <div class="map-name-tag" id="mapNameTag">加载中...</div>
+            <!-- 返回按钮栏 -->
+            <div class="control-header">
+                <button class="back-btn" id="backBtn">← 返回总览</button>
+                <h2 class="current-front-title" id="frontTitle">分类名称</h2>
             </div>
+
+            <!-- 中心主图灯箱区域 -->
+            <div class="main-lightbox">
+                <button class="arrow-btn left" id="prevMap">‹</button>
+                <div class="viewer-window">
+                    <img id="mainMapViewer" src="" alt="地图加载中:)">
+                </div>
+                <button class="arrow-btn right" id="nextMap">›</button>
+            </div>
+
+            <!-- 底部历史时间轴缩略图画廊 -->
+            <div class="gallery-timeline-wrapper">
+                <button class="gallery-scroll-btn" id="scrollLeft">‹</button>
+                <div class="gallery-track" id="galleryTrack">
+                    <!-- 缩略图由 JS 动态生成 -->
+                </div>
+                <button class="gallery-scroll-btn" id="scrollRight">›</button>
+            </div>
+
         </main>
     </div>
 
-    <script>
-        // 1. 方向分类配置（对应您的地图文件夹名称，建议英文，防止乱码）
-        const locations = [
-            { id: "sumei", name: "苏梅" },
-            { id: "haerkeifu", name: "哈尔科夫" },
-            { id: "kupiyangsizeke", name: "库普扬斯克" },
-            { id: "liman", name: "利曼" },
-            { id: "sic", name: "斯拉夫扬斯克" },
-            { id: "kec", name: "卡拉玛托尔斯克" },
-            { id: "kangc", name: "康斯坦丁尼夫卡" },
-            { id: "duoc", name: "多布罗皮利亚" },
-            { id: "aol", name: "亚历山德里夫卡" },
-            { id: "zblr", name: "大扎波罗热" },
-            { id: "xiao", name: "兵力密度5km" },
-            { id: "zhong", name: "兵力密度10km" },
-            { id: "zhonge", name: "俄军兵力密度10km" },
-            { id: "zhongw", name: "乌军兵力密度10km" },
-            { id: "da", name: "兵力密度全图" },
-        ];
-
-        // 2. 自动捕获当前的现实系统时间
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = today.getMonth() + 1;
-        const date = today.getDate();
-
-        // 格式化文本
-        const cnDateStr = `${year}年${month}月${date}日`;       // 用于顶部的标准中文格式显示
-        const fileNameDateStr = `${year}-${month}-${date}`;   // 用于图片命名：例如 2026-6-4
-
-        let currentLoc = locations[0]; // 默认选中的方向
-
-        // 3. 获取 DOM 节点
-        const liveDateEl = document.getElementById("liveDate");
-        const locationListEl = document.getElementById("locationList");
-        const panelTitleEl = document.getElementById("panelTitle");
-        const mapViewerEl = document.getElementById("mapViewer");
-        const mapNameTagEl = document.getElementById("mapNameTag");
-
-        // 4. 初始化应用
-        function initApp() {
-            // 设置显示的现实时间
-            liveDateEl.textContent = cnDateStr;
-            // 渲染左侧菜单栏
-            renderSidebar();
-            // 加载初始地图数据
-            updateMapContent();
-        }
-
-        // 5. 左侧菜单栏控制逻辑
-        function renderSidebar() {
-            locationListEl.innerHTML = "";
-            locations.forEach(loc => {
-                const li = document.createElement("li");
-                li.className = "location-item";
-                if (loc.id === currentLoc.id) {
-                    li.classList.add("active");
-                }
-                li.textContent = loc.name;
-                
-                // 菜单切换点击事件
-                li.addEventListener("click", () => {
-                    currentLoc = loc;
-                    document.querySelectorAll(".location-item").forEach(item => {
-                        item.classList.remove("active");
-                    });
-                    li.classList.add("active");
-                    updateMapContent(); // 动态加载新图片
-                });
-                
-                locationListEl.appendChild(li);
-            });
-        }
-
-        // 6. 地图动态读取与命名规则匹配逻辑
-        function updateMapContent() {
-            // 更新当前面板的小标题
-            panelTitleEl.textContent = `${currentLoc.name} - 最新总览`;
-            
-            // 按要求在图片下方显示文件标签名称（如 2026-6-4）
-            mapNameTagEl.textContent = fileNameDateStr;
-            
-            // 依照分类和现实日期自动计算图片的相对路径
-            // 图片完整物理存储路径格式如：maps/sumei/2026-6-4.jpeg
-            const imagePath = `maps/${currentLoc.id}/${fileNameDateStr}.jpeg`;
-            mapViewerEl.src = imagePath;
-        }
-
-        // 激活运行
-        window.addEventListener("DOMContentLoaded", initApp);
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
