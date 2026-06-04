@@ -310,14 +310,14 @@
         // 6. 地图动态读取与命名规则匹配逻辑
         function updateMapContent() {
             // 更新当前面板的小标题
-            panelTitleEl.textContent = `${currentLoc.name} - 最新前线总览`;
+            panelTitleEl.textContent = `${currentLoc.name} - 最新总览`;
             
             // 按要求在图片下方显示文件标签名称（如 2026-6-4）
             mapNameTagEl.textContent = fileNameDateStr;
             
             // 依照分类和现实日期自动计算图片的相对路径
-            // 图片完整物理存储路径格式如：maps/sumei/2026-6-4.png
-            const imagePath = `maps/${currentLoc.id}/${fileNameDateStr}.png`;
+            // 图片完整物理存储路径格式如：maps/sumei/2026-6-4.jpeg
+            const imagePath = `maps/${currentLoc.id}/${fileNameDateStr}.jpeg`;
             mapViewerEl.src = imagePath;
         }
 
