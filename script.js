@@ -1,6 +1,6 @@
 // 1. 配置你的数据（当你有新地图或新日期时，只需修改这里）
 const availableDates = ["2026-05-30", "2026-06-01"];
-const locations = ["苏梅", "哈尔科夫", "库普扬斯克"];
+const locations = ["康斯坦丁尼夫卡", "大扎波罗热", "亚历山德里夫卡"];
 
 // 2. 状态变量
 let currentDateIndex = 0; 
