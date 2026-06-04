@@ -79,12 +79,41 @@ body {
 }
 
 .wrapper {
-    padding: 30px;
+    padding: 15px 30px 30px 30px;
     max-width: 1400px;
     margin: 0 auto;
 }
 
-/* ================= 主界面网格样式 (图1 风格) ================= */
+/* 面包屑导航样式 (对应 image_3130fd.jpg 圈出的红圈位置) */
+.breadcrumb {
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: var(--text-muted);
+}
+
+.crumb-item {
+    transition: color 0.2s;
+}
+
+.crumb-item#crumbHome {
+    cursor: pointer;
+}
+
+.crumb-item#crumbHome:hover {
+    color: var(--pale-skin);
+}
+
+.crumb-item.active {
+    color: var(--text-light);
+    font-weight: bold;
+}
+
+.crumb-separator {
+    margin: 0 8px;
+    color: var(--text-muted);
+}
+
+/* ================= 主界面网格样式 ================= */
 .grid-view {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
@@ -134,7 +163,7 @@ body {
     color: var(--text-muted);
 }
 
-/* ================= 详情看板样式 (图2 风格) ================= */
+/* ================= 详情看板样式 ================= */
 .control-header {
     display: flex;
     align-items: center;
