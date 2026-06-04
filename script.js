@@ -21,6 +21,11 @@ const maps = [
         name: "顿涅茨克",
         desc: "顿涅茨克防御动态。"
     },
+        {
+        id: "south",
+        name: "南方",
+        desc: "扎波罗热和第聂伯罗比得罗夫斯克的防御动态。"
+    },
     {
         id: "xiao",
         name: "兵力密度(5km)",
@@ -172,4 +177,5 @@ function setupEventListeners() {
 }
 
 // 确保在页面加载完毕后拉起初始化
+window.addEventListener("DOMContentLoaded", init);
 window.addEventListener("DOMContentLoaded", init);
