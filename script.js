@@ -1,34 +1,40 @@
-// ================= 1. 核心日期配置池（以后有新更新，直接在这里往前追加日期即可！） =================
-// 这样可以 100% 避免纯前端盲猜图片导致的 HTTP 400 / 404 错误
-const GLOBAL_RECORDS = [
-    "2026-6-4",
-    "2026-6-3",
-    "2026-6-2",
-    "2026-6-1",
-    "2026-5-31",
-    "2026-5-30"
-    "2025-9-3"
-];
+// ================= 1. 自动化日期池生成（从 2025-9-3 自动生成到今天） =================
+const GLOBAL_RECORDS = [];
 
-// ================= 2. 分类基础配置（完全保持你需要的分类名称） =================
-const Mapdata = [
+function generateHistoryRecords() {
+    const startDate = new Date("2025-09-03"); // 你的地图历史起点
+    const endDate = new Date(); // 动态获取今天作为终点
+
+    // 从今天开始，倒序往前推，直到 2025年9月3日
+    let currentDate = new Date(endDate);
+    while (currentDate >= startDate) {
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth() + 1;
+        const day = currentDate.getDate();
+        
+        // 拼接成你存放图片的名称格式，例如 "2026-6-4" 或 "2025-9-3"
+        const dateStr = `${year}-${month}-${day}`;
+        GLOBAL_RECORDS.push(dateStr);
+        
+        // 往前推一天
+        currentDate.setDate(currentDate.getDate() - 1);
+    }
+}
+
+// ================= 2. 分类基础配置（保持你的分类名称） =================
+const mapProjectData = [
     {
-        id: "north",
+        id: "haerkeifu",
         name: "北方",
         desc: "哈尔科夫及周边边界区域最新战势跟踪图。"
     },
     {
-        id: "donbas",
+        id: "dunniecike",
         name: "顿涅茨克",
         desc: "顿涅茨克防御动态。"
     },
-        {
-        id: "south",
-        name: "南方",
-        desc: "扎波罗热和第聂伯罗比得罗夫斯克的防御动态。"
-    },
     {
-        id: "xiao",
+        id: "binglimidu",
         name: "兵力密度(5km)",
         desc: "俄乌两军兵力密度图,单位格子长度为5km。"
     }
@@ -54,7 +60,10 @@ const crumbDetail = document.getElementById("crumbDetail");
 
 // ================= 5. 初始化与现实日期渲染 =================
 function init() {
-    // 自动捕获当天的现实系统时间并显示在标题栏
+    // 1. 启动日期池自动生成
+    generateHistoryRecords();
+
+    // 2. 自动捕获当天的现实系统时间并显示在标题栏
     const today = new Date();
     liveDateEl.textContent = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
 
@@ -71,11 +80,11 @@ function renderGridHome() {
     crumbSep.classList.add("hidden");
     crumbDetail.classList.add("hidden");
 
-    Mapdata.forEach(front => {
+    mapProjectData.forEach(front => {
         const card = document.createElement("div");
         card.className = "front-card";
         
-        // 默认封面图直接采用全局配置里最新一天的图片
+        // 默认封面图直接采用自动生成的日期池里最新一天的图片
         const latestDate = GLOBAL_RECORDS[0];
         const coverImgPath = `maps/${front.id}/${latestDate}.jpeg`;
 
@@ -118,16 +127,16 @@ function updateLightboxAndGallery() {
     if (!activeFront || GLOBAL_RECORDS.length === 0) return;
 
     const currentMapName = GLOBAL_RECORDS[activeMapIndex];
-    // 图片格式严格采用 .jpeg 格式
     mainMapViewer.src = `maps/${activeFront.id}/${currentMapName}.jpeg`;
 
-    // 渲染底部纯图片画廊轨道（响应你的需求：不显示任何文字、名称和日期）
+    // 渲染底部纯图片画廊轨道（不显示任何文字、名称和日期）
     galleryTrack.innerHTML = "";
     GLOBAL_RECORDS.forEach((mapName, index) => {
         const thumb = document.createElement("div");
         thumb.className = `thumb-item ${index === activeMapIndex ? 'active' : ''}`;
         
         const thumbImgPath = `maps/${activeFront.id}/${mapName}.jpeg`;
+        // 利用 onerror 隐藏在列表中未上传或缺失的图片，保证画廊内只有有效存在的地图缩略图
         thumb.innerHTML = `<img src="${thumbImgPath}" onerror="this.style.display='none';">`;
         
         thumb.addEventListener("click", () => {
@@ -152,7 +161,7 @@ function setupEventListeners() {
     backBtn.addEventListener("click", returnToHome);
     crumbHome.addEventListener("click", returnToHome);
 
-    // 灯箱大图切换控制：左箭头
+    // 灯箱大图切换控制：左箭头（看历史更早的图）
     document.getElementById("prevMap").addEventListener("click", () => {
         if (activeMapIndex < GLOBAL_RECORDS.length - 1) {
             activeMapIndex++;
@@ -160,7 +169,7 @@ function setupEventListeners() {
         }
     });
 
-    // 灯箱大图切换控制：右箭头
+    // 灯箱大图切换控制：右箭头（看更新的图）
     document.getElementById("nextMap").addEventListener("click", () => {
         if (activeMapIndex > 0) {
             activeMapIndex--;
