@@ -10,7 +10,7 @@ const GLOBAL_RECORDS = [
 ];
 
 // ================= 2. 分类基础配置（完全保持你需要的分类名称） =================
-const maps = [
+const MapsDate = [
     {
         id: "north",
         name: "北方",
