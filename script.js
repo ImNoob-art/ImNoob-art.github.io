@@ -36,11 +36,11 @@ function initMenu() {
 function updateDisplay() {
     const currentDate = availableDates[currentDateIndex];
     dateText.textContent = currentDate;
-    viewTitle.textContent = `${currentLocation} - 前线态势`;
+    viewTitle.textContent = `${currentLocation} - 地区态势`;
     
-    // 拼接图片路径，例如: maps/苏梅/2026-05-30.png
+    // 拼接图片路径，例如: maps/苏梅/2026-05-30.jpeg
     // 使用 encodeURIComponent 防止中文路径在某些浏览器里解析出错
-    const imgPath = `maps/${encodeURIComponent(currentLocation)}/${currentDate}.png`;
+    const imgPath = `maps/${encodeURIComponent(currentLocation)}/${currentDate}.jpeg`;
     mapViewer.src = imgPath;
 }
 
