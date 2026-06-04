@@ -1,5 +1,5 @@
 // ================= 1. 数据源配置（可在此自由增删修改归档） =================
-const maps = [
+const mapProjectData = [
     {
         id: "north",
         name: "北方",
