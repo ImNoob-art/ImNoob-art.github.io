@@ -29,13 +29,13 @@ const maps = [
         name: "兵力密度(10km)",
         desc: "俄乌两军兵力密度图,单位格子长度为5km。",
         history: ["2026-6-4", "2026-06-03", "2026-06-02", "2026-06-01"]
-    },
+    }
 ];
 
+
 // ================= 2. 全局状态控制 =================
-let activeFront = null;        
-let activeMapIndex = 0;        
-let generatedDates = [];       // 存放自动化生成的日期检测池
+let activeFront = null;        // 当前激活的分类对象
+let activeMapIndex = 0;        // 当前激活的图在历史记录中的索引
 
 // ================= 3. 元素捕获 =================
 const gridView = document.getElementById("gridView");
@@ -45,11 +45,6 @@ const frontTitle = document.getElementById("frontTitle");
 const mainMapViewer = document.getElementById("mainMapViewer");
 const galleryTrack = document.getElementById("galleryTrack");
 const backBtn = document.getElementById("backBtn");
-
-// 面包屑 DOM 节点
-const crumbHome = document.getElementById("crumbHome");
-const crumbSep = document.getElementById("crumbSep");
-const crumbDetail = document.getElementById("crumbDetail");
 
 // ================= 4. 初始化与现实日期渲染 =================
 function init() {
@@ -61,28 +56,19 @@ function init() {
     setupEventListeners();
 }
 
-// ================= 6. 渲染主页网格 (面包屑: 总览) =================
+// ================= 5. 渲染主页导航卡片 (图1 风格) =================
 function renderGridHome() {
     gridView.innerHTML = "";
-    
-    // 更新面包屑状态
-    crumbHome.classList.add("active");
-    crumbSep.classList.add("hidden");
-    crumbDetail.classList.add("hidden");
-
     mapProjectData.forEach(front => {
         const card = document.createElement("div");
         card.className = "front-card";
         
-        // 如果自动检测到了图片，封面用最新的；没有检测到，则使用缺省占位图
-        const hasMap = front.validHistory && front.validHistory.length > 0;
-        const coverImgPath = hasMap 
-            ? `maps/${front.id}/${front.validHistory[0]}.jpeg` 
-            : `https://placehold.co/600x400/111416/8a949d?text=No+Image`;
+        // 默认卡片封面使用它历史记录中最新的那张图(第一张)
+        const coverImgPath = `maps/${front.id}/${front.history[0]}.jpeg`;
 
         card.innerHTML = `
             <div class="card-thumb-wp">
-                <img src="${coverImgPath}" alt="${front.name}">
+                <img src="${coverImgPath}" alt="${front.name}" onerror="this.src='https://placehold.co/600x400/111416/8a949d?text=No+Image'">
             </div>
             <div class="card-info">
                 <h3>${front.name}</h3>
@@ -95,44 +81,34 @@ function renderGridHome() {
     });
 }
 
-// ================= 7. 进入分类详情页 (面包屑: 总览 > 分类名称) =================
+// ================= 6. 切换至看板详情页 (图2 风格) =================
 function enterDetailView(front) {
     activeFront = front;
-    activeMapIndex = 0; 
+    activeMapIndex = 0; // 默认展示最新的第一张
 
     gridView.classList.add("hidden");
     detailView.classList.remove("hidden");
-
-    // 动态同步更新面包屑
-    crumbHome.classList.remove("active");
-    crumbSep.classList.remove("hidden");
-    crumbDetail.classList.remove("hidden");
-    crumbDetail.textContent = front.name;
-    crumbDetail.classList.add("active");
 
     frontTitle.textContent = front.name;
     updateLightboxAndGallery();
 }
 
-// ================= 8. 更新大图与底部的历史时间轴画廊 (无任何文字标签) =================
+// ================= 7. 渲染大图与底部的历史时间轴画廊 =================
 function updateLightboxAndGallery() {
-    if (!activeFront || !activeFront.validHistory || activeFront.validHistory.length === 0) {
-        mainMapViewer.src = "";
-        galleryTrack.innerHTML = "<p style='padding:20px;color:#8a949d;'>暂无历史归档图片</p>";
-        return;
-    }
+    if (!activeFront || activeFront.history.length === 0) return;
 
-    const currentMapName = activeFront.validHistory[activeMapIndex];
+    const currentMapName = activeFront.history[activeMapIndex];
+    // 图片渲染核心：识别为 .jpeg 格式
     mainMapViewer.src = `maps/${activeFront.id}/${currentMapName}.jpeg`;
 
-    // 渲染底部画廊（不包含任何名称和日期标签，只有缩略图）
+    // 渲染底部画廊横向轨道
     galleryTrack.innerHTML = "";
-    activeFront.validHistory.forEach((mapName, index) => {
+    activeFront.history.forEach((mapName, index) => {
         const thumb = document.createElement("div");
         thumb.className = `thumb-item ${index === activeMapIndex ? 'active' : ''}`;
         
         const thumbImgPath = `maps/${activeFront.id}/${mapName}.jpeg`;
-        thumb.innerHTML = `<img src="${thumbImgPath}">`;
+        thumb.innerHTML = `<img src="${thumbImgPath}" onerror="this.src='https://placehold.co/120x75/111416/8a949d?text=Error'">`;
         
         thumb.addEventListener("click", () => {
             activeMapIndex = index;
@@ -142,23 +118,18 @@ function updateLightboxAndGallery() {
     });
 }
 
-// ================= 9. 统一退出并返回主页的方法 =================
-function returnToHome() {
-    detailView.classList.add("hidden");
-    gridView.classList.remove("hidden");
-    activeFront = null;
-    renderGridHome();
-}
-
-// ================= 10. 事件监听设置 =================
+// ================= 8. 事件监听设置 =================
 function setupEventListeners() {
-    // 两个返回逻辑都调用统一的方法
-    backBtn.addEventListener("click", returnToHome);
-    crumbHome.addEventListener("click", returnToHome);
+    // 返回按钮事件
+    backBtn.addEventListener("click", () => {
+        detailView.classList.add("hidden");
+        gridView.classList.remove("hidden");
+        activeFront = null;
+    });
 
     // 大图切换控制：左箭头
     document.getElementById("prevMap").addEventListener("click", () => {
-        if (activeFront && activeFront.validHistory && activeMapIndex < activeFront.validHistory.length - 1) {
+        if (activeFront && activeMapIndex < activeFront.history.length - 1) {
             activeMapIndex++;
             updateLightboxAndGallery();
         }
@@ -166,7 +137,7 @@ function setupEventListeners() {
 
     // 大图切换控制：右箭头
     document.getElementById("nextMap").addEventListener("click", () => {
-        if (activeFront && activeFront.validHistory && activeMapIndex > 0) {
+        if (activeFront && activeMapIndex > 0) {
             activeMapIndex--;
             updateLightboxAndGallery();
         }
