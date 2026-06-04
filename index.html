@@ -12,7 +12,7 @@
     <header class="top-bar">
         <div class="top-brand">
             <h1 class="site-title">D.Kaufman的地图库</h1>
-            <div class="live-date" id="liveDate">加载中  :)</div>
+            <div class="live-date" id="liveDate">更新日期:2026年6月5日</div>
         </div>
         <a href="https://www.zhihu.com/people/dick-80-60" target="_blank" class="zhihu-link">
             知乎：@D.Kaufman ↗
@@ -22,19 +22,12 @@
     <!-- 页面容器 -->
     <div class="wrapper">
         
-        <!-- 面包屑导航栏（对应 image_3130fd.jpg 圈出的红圈位置） -->
-        <div class="breadcrumb" id="breadcrumb">
-            <span class="crumb-item active" id="crumbHome">总览</span>
-            <span class="crumb-separator hidden" id="crumbSep">&gt;</span>
-            <span class="crumb-item hidden" id="crumbDetail">分类名称</span>
-        </div>
-        
-        <!-- ================= 主界面：战线分类卡片网格 ================= -->
+        <!-- ================= 主界面：战线分类卡片网格 (图1 风格) ================= -->
         <main class="grid-view" id="gridView">
-            <!-- 这里的卡片由 JavaScript 自动生成 -->
+            <!-- 这里的卡片由 JavaScript 根据配置自动生成 -->
         </main>
 
-        <!-- ================= 详情界面：独立看图与历史画廊 ================= -->
+        <!-- ================= 详情界面：独立看图与历史画廊 (图2 风格) ================= -->
         <main class="detail-view hidden" id="detailView">
             
             <!-- 返回按钮栏 -->
@@ -47,7 +40,7 @@
             <div class="main-lightbox">
                 <button class="arrow-btn left" id="prevMap">‹</button>
                 <div class="viewer-window">
-                    <img id="mainMapViewer" src="" alt="当天地图未上传或无数据...">
+                    <img id="mainMapViewer" src="" alt="地图加载中...">
                 </div>
                 <button class="arrow-btn right" id="nextMap">›</button>
             </div>
