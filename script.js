@@ -24,20 +24,25 @@ function generateHistoryRecords() {
 // ================= 2. 分类基础配置（保持你的分类名称） =================
 const mapProjectData = [
     {
-        id: "haerkeifu",
+        id: "north",
         name: "北方",
         desc: "哈尔科夫及周边边界区域最新战势跟踪图。"
     },
     {
-        id: "dunniecike",
+        id: "donbas",
         name: "顿涅茨克",
         desc: "顿涅茨克防御动态。"
     },
     {
-        id: "binglimidu",
+        id: "xiao",
         name: "兵力密度(5km)",
         desc: "俄乌两军兵力密度图,单位格子长度为5km。"
-    }
+    },
+        {
+        id: "zhong",
+        name: "兵力密度(10km)",
+        desc: "俄乌两军兵力密度图,单位格子长度为10km。图中俄乌双方格子会出现叠加的情况具体内容请看对应方的具体情况"
+    },
 ];
 
 // ================= 3. 全局状态控制 =================
