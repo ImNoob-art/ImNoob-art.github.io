@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最新前线地图总览</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="top-bar">
+        <button id="prev-date">‹ 上一个记录日</button>
+        <div class="date-display">
+            <span class="label">当前日期</span>
+            <span id="current-date-text">2026-05-30</span>
+        </div>
+        <button id="next-date">下一个记录日 ›</button>
+    </header>
+
+    <div class="main-container">
+        <nav class="side-menu">
+            <h3>方向选择</h3>
+            <ul id="location-list">
+                </ul>
+        </nav>
+
+        <main class="content-area">
+            <h2 id="view-title">最新前线总览</h2>
+            <div class="map-wrapper">
+                <img id="map-viewer" src="" alt="地图加载中或当天无数据..." />
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
