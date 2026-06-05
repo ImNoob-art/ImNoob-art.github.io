@@ -50,7 +50,7 @@ body {
 .user-avatar {
     width: 48px;
     height: 48px;
-    border-radius: 50%;   /* 圆形头像 */
+    border-radius: 20%;   /* 圆形头像 */
     object-fit: cover;
     border: 2px solid var(--pale-skin);
 }
