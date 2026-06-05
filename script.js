@@ -132,7 +132,7 @@ const mapProjectData = [
     {
         id: "Zaporizhzhia",
         name: "扎波罗热",
-        desc: "或叫第聂伯罗比得罗夫斯克方向。不定期更新该方向的局势。",
+        desc: "扎波罗热州战场态势图。不定期更新该方向的局势。",
         history: [
             "2026-6-5",// 历史起点
         ]
