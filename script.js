@@ -105,11 +105,18 @@ const mapProjectData = [
     },
 ];
 
-// ================= 2. 全局状态控制 =================
+// ================= 2. 状态控制池 =================
 let activeFront = null;        
 let activeMapIndex = 0;        
 
-// ================= 3. 元素捕获 =================
+// 缩放与拖拽物理引擎变量
+let isMaxZoom = false; 
+let scale = 1;
+let isDragging = false;
+let startX = 0, startY = 0;
+let translateX = 0, translateY = 0;
+
+// DOM 捕获
 const gridView = document.getElementById("gridView");
 const detailView = document.getElementById("detailView");
 const liveDateEl = document.getElementById("liveDate");
@@ -118,30 +125,25 @@ const mainMapViewer = document.getElementById("mainMapViewer");
 const galleryTrack = document.getElementById("galleryTrack");
 const backBtn = document.getElementById("backBtn");
 
-// 面包屑 DOM 节点
 const crumbHome = document.getElementById("crumbHome");
 const crumbSep = document.getElementById("crumbSep");
 const crumbDetail = document.getElementById("crumbDetail");
 
-// 全屏放大组件捕获
-const zoomTrigger = document.getElementById("zoomTrigger");
-const fullscreenOverlay = document.getElementById("fullscreenOverlay");
-const fullscreenTargetImg = document.getElementById("fullscreenTargetImg");
-const closeOverlay = document.getElementById("closeOverlay");
+// 新交互节点
+const zoomWindow = document.getElementById("zoomWindow");
+const zoomToggleBtn = document.getElementById("zoomToggleBtn");
 
-// ================= 4. 初始化与现实日期渲染 =================
+// ================= 3. 初始化 =================
 function init() {
     const today = new Date();
     liveDateEl.textContent = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
-
     renderGridHome();
     setupEventListeners();
 }
 
-// ================= 5. 渲染主页网格 =================
+// ================= 4. 渲染主网格 =================
 function renderGridHome() {
     gridView.innerHTML = "";
-    
     crumbHome.classList.add("active");
     crumbSep.classList.add("hidden");
     crumbDetail.classList.add("hidden");
@@ -149,28 +151,23 @@ function renderGridHome() {
     mapProjectData.forEach(front => {
         const card = document.createElement("div");
         card.className = "front-card";
-        
-        const hasMap = front.history && front.history.length > 0;
-        const coverImgPath = hasMap 
-            ? `maps/${front.id}/${front.history[0]}.jpeg` 
-            : `https://placehold.co/600x400/111416/8a949d?text=%E6%9A%82%E6%97%A0%E5%9C%B0%E5%9B%BE`;
+        const coverImgPath = front.history.length > 0 ? `maps/${front.id}/${front.history[0]}.jpeg` : "";
 
         card.innerHTML = `
             <div class="card-thumb-wp">
-                <img src="${coverImgPath}" alt="${front.name}" onerror="this.src='https://placehold.co/600x400/111416/8a949d?text=%E5%9C%B0%E5%9B%BE%E5%8A%A0%E8%BD%BD%E5%A4%B1%E8%B4%A5'">
+                <img src="${coverImgPath}" alt="${front.name}" onerror="this.src='https://placehold.co/600x400/111416/8a949d?text=%E6%9A%82%E6%97%A0%E5%9C%B0%E5%9B%BE'">
             </div>
             <div class="card-info">
                 <h3>${front.name}</h3>
                 <p>${front.desc}</p>
             </div>
         `;
-
         card.addEventListener("click", () => enterDetailView(front));
         gridView.appendChild(card);
     });
 }
 
-// ================= 6. 进入分类详情页 =================
+// ================= 5. 进入详情页 =================
 function enterDetailView(front) {
     activeFront = front;
     activeMapIndex = 0; 
@@ -188,27 +185,21 @@ function enterDetailView(front) {
     updateLightboxAndGallery();
 }
 
-// ================= 7. 更新大图与底部的历史时间轴画廊 =================
+// ================= 6. 核心渲染大图 =================
 function updateLightboxAndGallery() {
-    if (!activeFront || !activeFront.history || activeFront.history.length === 0) {
-        mainMapViewer.src = "";
-        galleryTrack.innerHTML = "<p style='padding:20px;color:#8a949d;'>该分类暂无归档地图</p>";
-        return;
-    }
+    if (!activeFront || activeFront.history.length === 0) return;
 
     const currentMapName = activeFront.history[activeMapIndex];
     mainMapViewer.src = `maps/${activeFront.id}/${currentMapName}.jpeg`;
-
-    // 同步把超清大图路径也塞入放大组件的缓冲池中
-    fullscreenTargetImg.src = `maps/${activeFront.id}/${currentMapName}.jpeg`;
+    
+    // 每次换图时，重置缩放矩阵引擎
+    resetZoomEngine();
 
     galleryTrack.innerHTML = "";
     activeFront.history.forEach((mapName, index) => {
         const thumb = document.createElement("div");
         thumb.className = `thumb-item ${index === activeMapIndex ? 'active' : ''}`;
-        
-        const thumbImgPath = `maps/${activeFront.id}/${mapName}.jpeg`;
-        thumb.innerHTML = `<img src="${thumbImgPath}" onerror="this.parentNode.style.display='none';">`;
+        thumb.innerHTML = `<img src="maps/${activeFront.id}/${mapName}.jpeg" onerror="this.parentNode.style.display='none';">`;
         
         thumb.addEventListener("click", () => {
             activeMapIndex = index;
@@ -218,65 +209,128 @@ function updateLightboxAndGallery() {
     });
 }
 
-// ================= 8. 返回主页逻辑 =================
+// ================= 7. 物理缩放与矩阵位置重置引擎 =================
+function resetZoomEngine() {
+    scale = 1;
+    translateX = 0;
+    translateY = 0;
+    mainMapViewer.style.transform = `translate(0px, 0px) scale(1)`;
+}
+
+function updateTransformMatrix() {
+    mainMapViewer.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+}
+
+// ================= 8. 展开 / 取消放大核心逻辑切换 =================
+function toggleMaxZoomMode() {
+    isMaxZoom = !isMaxZoom;
+    
+    if (isMaxZoom) {
+        // 进入平铺满屏看图模式
+        document.body.classList.add("max-zoom-mode");
+        zoomWindow.classList.add("zoom-window-active");
+        zoomToggleBtn.textContent = "❌ 取消放大";
+        
+        // 隐藏面包屑、导航标题、历史画廊
+        document.getElementById("topBar").classList.add("hidden");
+        document.getElementById("breadcrumb").classList.add("hidden");
+        document.getElementById("controlHeader").classList.add("hidden");
+        document.getElementById("galleryWrapper").classList.add("hidden");
+    } else {
+        // 退出看图模式，全部还原
+        document.body.classList.remove("max-zoom-mode");
+        zoomWindow.classList.remove("zoom-window-active");
+        zoomToggleBtn.textContent = "🔍 点击放大";
+        
+        document.getElementById("topBar").classList.remove("hidden");
+        document.getElementById("breadcrumb").classList.remove("hidden");
+        document.getElementById("controlHeader").classList.remove("hidden");
+        document.getElementById("galleryWrapper").classList.remove("hidden");
+        
+        resetZoomEngine();
+    }
+}
+
 function returnToHome() {
+    if (isMaxZoom) toggleMaxZoomMode();
     detailView.classList.add("hidden");
     gridView.classList.remove("hidden");
     activeFront = null;
     renderGridHome();
 }
 
-// ================= 9. 事件监听设置 =================
+// ================= 9. 完整手势控制与系统级监听 =================
 function setupEventListeners() {
     backBtn.addEventListener("click", returnToHome);
     crumbHome.addEventListener("click", returnToHome);
 
-    // 大图切换控制
+    // 左右切图
     document.getElementById("prevMap").addEventListener("click", (e) => {
-        e.stopPropagation(); // 阻止触发放大
-        if (activeFront && activeFront.history && activeMapIndex < activeFront.history.length - 1) {
+        e.stopPropagation();
+        if (activeFront && activeMapIndex < activeFront.history.length - 1) {
             activeMapIndex++;
             updateLightboxAndGallery();
         }
     });
 
     document.getElementById("nextMap").addEventListener("click", (e) => {
-        e.stopPropagation(); // 阻止触发放大
-        if (activeFront && activeFront.history && activeMapIndex > 0) {
+        e.stopPropagation();
+        if (activeFront && activeMapIndex > 0) {
             activeMapIndex--;
             updateLightboxAndGallery();
         }
     });
 
-    // 底部画廊水平滚动条控制
-    document.getElementById("scrollLeft").addEventListener("click", () => {
-        galleryTrack.scrollLeft -= 150;
-    });
-    document.getElementById("scrollRight").addEventListener("click", () => {
-        galleryTrack.scrollLeft += 150;
-    });
-
-    // ================= 放大镜手势核心绑定 =================
-    // 1. 点击核心大图触发超清全屏显示
-    zoomTrigger.addEventListener("click", () => {
-        if (mainMapViewer.src && !mainMapViewer.src.includes("placehold")) {
-            fullscreenOverlay.classList.remove("hidden");
-            document.body.style.overflow = "hidden"; // 全屏查看时主网页禁止跟随滚动
+    // 触发平铺放大切换
+    zoomWindow.addEventListener("click", (e) => {
+        // 如果点的是左右切图按钮则不执行
+        if (e.target.classList.contains('arrow-btn')) return;
+        if (!isDragging) {
+            toggleMaxZoomMode();
         }
     });
 
-    // 2. 点击关闭按钮隐藏大图
-    closeOverlay.addEventListener("click", () => {
-        fullscreenOverlay.classList.add("hidden");
-        document.body.style.overflow = ""; // 恢复网页滚动
+    // 🌟 高级交互 A：鼠标滚轮无限镜效果（仅在放大状态下生效）
+    zoomWindow.addEventListener("wheel", (e) => {
+        if (!isMaxZoom) return;
+        e.preventDefault(); // 阻止网页默认滚动
+
+        const zoomFactor = 0.15;
+        if (e.deltaY < 0) {
+            scale += zoomFactor; // 放大
+        } else {
+            scale = Math.max(0.5, scale - zoomFactor); // 缩小，设置安全底线 0.5
+        }
+        updateTransformMatrix();
+    }, { passive: false });
+
+    // 🌟 高级交互 B：鼠标左键任意抓取并拖拽
+    zoomWindow.addEventListener("mousedown", (e) => {
+        if (!isMaxZoom) return;
+        isDragging = true;
+        zoomWindow.style.cursor = "grabbing";
+        startX = e.clientX - translateX;
+        startY = e.clientY - translateY;
     });
 
-    // 3. 点击超清大图本身也能快速缩回，优化用户体验
-    fullscreenTargetImg.addEventListener("click", () => {
-        fullscreenOverlay.classList.add("hidden");
-        document.body.style.overflow = "";
+    window.addEventListener("mousemove", (e) => {
+        if (!isDragging || !isMaxZoom) return;
+        translateX = e.clientX - startX;
+        translateY = e.clientY - startY;
+        updateTransformMatrix();
     });
+
+    window.addEventListener("mouseup", () => {
+        if (isDragging) {
+            // 延迟微量阻尼时间，防止误触发点击退出
+            setTimeout(() => { isDragging = false; }, 50);
+            zoomWindow.style.cursor = "move";
+        }
+    });
+
+    // 底部横向移动
+    document.getElementById("scrollLeft").addEventListener("click", () => galleryTrack.scrollLeft -= 150);
+    document.getElementById("scrollRight").addEventListener("click", () => galleryTrack.scrollLeft += 150);
 }
 
-// 确保在页面加载完毕后拉起初始化
 window.addEventListener("DOMContentLoaded", init);
