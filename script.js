@@ -229,7 +229,7 @@ function toggleMaxZoomMode() {
         // 进入平铺满屏看图模式
         document.body.classList.add("max-zoom-mode");
         zoomWindow.classList.add("zoom-window-active");
-        zoomToggleBtn.textContent = "❌ 取消放大";
+        zoomToggleBtn.textContent = "❌ 双击取消放大";
         
         // 隐藏面包屑、导航标题、历史画廊
         document.getElementById("topBar").classList.add("hidden");
