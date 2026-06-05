@@ -106,8 +106,8 @@ const mapProjectData = [
 ];
 
 // ================= 2. 全局状态控制 =================
-let activeFront = null;        // 当前点进去的分类对象
-let activeMapIndex = 0;        // 当前大图对应的索引
+let activeFront = null;        
+let activeMapIndex = 0;        
 
 // ================= 3. 元素捕获 =================
 const gridView = document.getElementById("gridView");
@@ -123,9 +123,14 @@ const crumbHome = document.getElementById("crumbHome");
 const crumbSep = document.getElementById("crumbSep");
 const crumbDetail = document.getElementById("crumbDetail");
 
+// 全屏放大组件捕获
+const zoomTrigger = document.getElementById("zoomTrigger");
+const fullscreenOverlay = document.getElementById("fullscreenOverlay");
+const fullscreenTargetImg = document.getElementById("fullscreenTargetImg");
+const closeOverlay = document.getElementById("closeOverlay");
+
 // ================= 4. 初始化与现实日期渲染 =================
 function init() {
-    // 自动获取用户当天的现实系统时间并显示在标题栏
     const today = new Date();
     liveDateEl.textContent = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
 
@@ -133,11 +138,10 @@ function init() {
     setupEventListeners();
 }
 
-// ================= 5. 渲染主页网格 (面包屑: 总览) =================
+// ================= 5. 渲染主页网格 =================
 function renderGridHome() {
     gridView.innerHTML = "";
     
-    // 面包屑归位
     crumbHome.classList.add("active");
     crumbSep.classList.add("hidden");
     crumbDetail.classList.add("hidden");
@@ -146,7 +150,6 @@ function renderGridHome() {
         const card = document.createElement("div");
         card.className = "front-card";
         
-        // 关键改动：封面图直接采用该分类自身 history 里的第一张（最新的一张）
         const hasMap = front.history && front.history.length > 0;
         const coverImgPath = hasMap 
             ? `maps/${front.id}/${front.history[0]}.jpeg` 
@@ -167,15 +170,14 @@ function renderGridHome() {
     });
 }
 
-// ================= 6. 进入分类详情页 (面包屑: 总览 > 分类名称) =================
+// ================= 6. 进入分类详情页 =================
 function enterDetailView(front) {
     activeFront = front;
-    activeMapIndex = 0; // 默认展示该分类最新的第一张图
+    activeMapIndex = 0; 
 
     gridView.classList.add("hidden");
     detailView.classList.remove("hidden");
 
-    // 动态同步面包屑
     crumbHome.classList.remove("active");
     crumbSep.classList.remove("hidden");
     crumbDetail.classList.remove("hidden");
@@ -194,11 +196,12 @@ function updateLightboxAndGallery() {
         return;
     }
 
-    // 获取当前索引对应的专属日期文件名
     const currentMapName = activeFront.history[activeMapIndex];
     mainMapViewer.src = `maps/${activeFront.id}/${currentMapName}.jpeg`;
 
-    // 渲染底部纯图片画廊轨道（只循环当前分类自己的 history 数组，不显示任何文字标签）
+    // 同步把超清大图路径也塞入放大组件的缓冲池中
+    fullscreenTargetImg.src = `maps/${activeFront.id}/${currentMapName}.jpeg`;
+
     galleryTrack.innerHTML = "";
     activeFront.history.forEach((mapName, index) => {
         const thumb = document.createElement("div");
@@ -215,7 +218,7 @@ function updateLightboxAndGallery() {
     });
 }
 
-// ================= 8. 统一返回主页逻辑 =================
+// ================= 8. 返回主页逻辑 =================
 function returnToHome() {
     detailView.classList.add("hidden");
     gridView.classList.remove("hidden");
@@ -228,16 +231,17 @@ function setupEventListeners() {
     backBtn.addEventListener("click", returnToHome);
     crumbHome.addEventListener("click", returnToHome);
 
-    // 灯箱大图切换控制：左箭头（看更早的历史记录）
-    document.getElementById("prevMap").addEventListener("click", () => {
+    // 大图切换控制
+    document.getElementById("prevMap").addEventListener("click", (e) => {
+        e.stopPropagation(); // 阻止触发放大
         if (activeFront && activeFront.history && activeMapIndex < activeFront.history.length - 1) {
             activeMapIndex++;
             updateLightboxAndGallery();
         }
     });
 
-    // 灯箱大图切换控制：右箭头（看更新的记录）
-    document.getElementById("nextMap").addEventListener("click", () => {
+    document.getElementById("nextMap").addEventListener("click", (e) => {
+        e.stopPropagation(); // 阻止触发放大
         if (activeFront && activeFront.history && activeMapIndex > 0) {
             activeMapIndex--;
             updateLightboxAndGallery();
@@ -250,6 +254,27 @@ function setupEventListeners() {
     });
     document.getElementById("scrollRight").addEventListener("click", () => {
         galleryTrack.scrollLeft += 150;
+    });
+
+    // ================= 放大镜手势核心绑定 =================
+    // 1. 点击核心大图触发超清全屏显示
+    zoomTrigger.addEventListener("click", () => {
+        if (mainMapViewer.src && !mainMapViewer.src.includes("placehold")) {
+            fullscreenOverlay.classList.remove("hidden");
+            document.body.style.overflow = "hidden"; // 全屏查看时主网页禁止跟随滚动
+        }
+    });
+
+    // 2. 点击关闭按钮隐藏大图
+    closeOverlay.addEventListener("click", () => {
+        fullscreenOverlay.classList.add("hidden");
+        document.body.style.overflow = ""; // 恢复网页滚动
+    });
+
+    // 3. 点击超清大图本身也能快速缩回，优化用户体验
+    fullscreenTargetImg.addEventListener("click", () => {
+        fullscreenOverlay.classList.add("hidden");
+        document.body.style.overflow = "";
     });
 }
 
