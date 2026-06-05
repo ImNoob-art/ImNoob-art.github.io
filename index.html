@@ -8,10 +8,9 @@
 </head>
 <body>
 
-    <header class="top-bar">
+    <header class="top-bar" id="topBar">
         <div class="top-brand">
             <img src="image/1780213994585.jpeg" alt="Avatar" class="user-avatar">
-            
             <div class="title-meta-group">
                 <h1 class="site-title">D.Kaufman的地图库</h1>
                 <div class="live-date" id="liveDate">加载中...</div>
@@ -35,21 +34,23 @@
 
         <main class="detail-view hidden" id="detailView">
             
-            <div class="control-header">
+            <div class="control-header" id="controlHeader">
                 <button class="back-btn" id="backBtn">← 返回总览</button>
-                <h2 class="current-front-title" id="frontTitle">分类名称</h2>
+                <h2 class="current-front-title" id="frontTitle">位置名称</h2>
             </div>
 
-            <div class="main-lightbox">
+            <div class="main-lightbox" id="mainLightbox">
                 <button class="arrow-btn left" id="prevMap">‹</button>
-                <div class="viewer-window" id="zoomTrigger" title="点击查看超清大图 / 放大">
-                    <img id="mainMapViewer" src="" alt="无数据  :(">
-                    <div class="zoom-hint-tag">🔍 点击放大</div>
+                
+                <div class="viewer-window" id="zoomWindow">
+                    <img id="mainMapViewer" src="" alt="地图加载中..." draggable="false">
+                    <div class="zoom-hint-tag" id="zoomToggleBtn">🔍 点击放大</div>
                 </div>
+                
                 <button class="arrow-btn right" id="nextMap">›</button>
             </div>
 
-            <div class="gallery-timeline-wrapper">
+            <div class="gallery-timeline-wrapper" id="galleryWrapper">
                 <button class="gallery-scroll-btn" id="scrollLeft">‹</button>
                 <div class="gallery-track" id="galleryTrack">
                     </div>
@@ -57,13 +58,6 @@
             </div>
 
         </main>
-    </div>
-
-    <div class="fullscreen-overlay hidden" id="fullscreenOverlay">
-        <span class="close-overlay-btn" id="closeOverlay">&times;</span>
-        <div class="overlay-scroll-container">
-            <img src="" id="fullscreenTargetImg" alt="放大">
-        </div>
     </div>
 
     <script src="script.js"></script>
