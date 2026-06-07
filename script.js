@@ -183,7 +183,7 @@ const crumbHome = document.getElementById("crumbHome");
 const crumbSep = document.getElementById("crumbSep");
 const crumbDetail = document.getElementById("crumbDetail");
 
-// 新交互节点
+// 交互节点
 const zoomWindow = document.getElementById("zoomWindow");
 const zoomToggleBtn = document.getElementById("zoomToggleBtn");
 
@@ -263,7 +263,7 @@ function updateLightboxAndGallery() {
     });
 }
 
-// ================= 7. 物理缩放与矩阵位置重置引擎 =================
+// ================= 7. 物理缩放与位置重置引擎 =================
 function resetZoomEngine() {
     scale = 1;
     translateX = 0;
@@ -280,18 +280,16 @@ function toggleMaxZoomMode() {
     isMaxZoom = !isMaxZoom;
     
     if (isMaxZoom) {
-        // 进入平铺满屏看图模式
         document.body.classList.add("max-zoom-mode");
         zoomWindow.classList.add("zoom-window-active");
         zoomToggleBtn.textContent = "❌ 双击取消放大";
         
-        // 隐藏面包屑、导航标题、历史画廊
+        // 全盘深度隐藏周围模块
         document.getElementById("topBar").classList.add("hidden");
         document.getElementById("breadcrumb").classList.add("hidden");
         document.getElementById("controlHeader").classList.add("hidden");
         document.getElementById("galleryWrapper").classList.add("hidden");
     } else {
-        // 退出看图模式，全部还原
         document.body.classList.remove("max-zoom-mode");
         zoomWindow.classList.remove("zoom-window-active");
         zoomToggleBtn.textContent = "🔍 点击放大";
@@ -337,28 +335,27 @@ function setupEventListeners() {
 
     // 触发平铺放大切换
     zoomWindow.addEventListener("click", (e) => {
-        // 如果点的是左右切图按钮则不执行
         if (e.target.classList.contains('arrow-btn')) return;
         if (!isDragging) {
             toggleMaxZoomMode();
         }
     });
 
-    // 🌟 高级交互 A：鼠标滚轮无限镜效果（仅在放大状态下生效）
+    // 鼠标滚轮无限镜效果
     zoomWindow.addEventListener("wheel", (e) => {
         if (!isMaxZoom) return;
-        e.preventDefault(); // 阻止网页默认滚动
+        e.preventDefault(); 
 
         const zoomFactor = 0.15;
         if (e.deltaY < 0) {
-            scale += zoomFactor; // 放大
+            scale += zoomFactor; 
         } else {
-            scale = Math.max(0.5, scale - zoomFactor); // 缩小，设置安全底线 0.5
+            scale = Math.max(0.5, scale - zoomFactor); 
         }
         updateTransformMatrix();
     }, { passive: false });
 
-    // 🌟 高级交互 B：鼠标左键任意抓取并拖拽
+    // 鼠标左键任意抓取并拖拽
     zoomWindow.addEventListener("mousedown", (e) => {
         if (!isMaxZoom) return;
         isDragging = true;
@@ -376,7 +373,6 @@ function setupEventListeners() {
 
     window.addEventListener("mouseup", () => {
         if (isDragging) {
-            // 延迟微量阻尼时间，防止误触发点击退出
             setTimeout(() => { isDragging = false; }, 50);
             zoomWindow.style.cursor = "move";
         }
