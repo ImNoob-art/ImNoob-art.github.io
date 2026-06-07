@@ -27,7 +27,7 @@ body {
     display: none !important;
 }
 
-/* ================= 顶部导航栏升级 ================= */
+/* ================= 顶部导航栏布局 ================= */
 .top-bar {
     background-color: var(--prussian-blue);
     border-bottom: 3px solid var(--pale-skin);
@@ -81,7 +81,7 @@ body {
 .header-links-group {
     display: flex;
     align-items: center;
-    gap: 15px; /* 按钮之间的间距 */
+    gap: 15px;
 }
 
 /* 统一的硬核白底黑字、上下粗黑边框样式 */
@@ -110,13 +110,23 @@ body {
     padding: 15px 30px 30px 30px;
     max-width: 1400px;
     margin: 0 auto;
+    position: relative; /* 为右上角 Logo 的绝对定位提供锚点参考 */
+}
+
+/* ================= 🌟 统一区域头部与黄框处固定 Logo 🌟 ================= */
+.wrapper-header-zone {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 22px;
+    width: 100%;
 }
 
 /* 面包屑 */
 .breadcrumb {
     font-size: 15px;
-    margin-bottom: 22px;
     color: var(--text-muted);
+    margin-bottom: 0; /* 统合至父级布局中 */
 }
 .crumb-item { transition: color 0.2s; }
 .crumb-item#crumbHome { cursor: pointer; }
@@ -124,12 +134,40 @@ body {
 .crumb-item.active { color: var(--text-light); font-weight: bold; }
 .crumb-separator { margin: 0 8px; color: var(--text-muted); }
 
-/* ================= 🌟 主页面“文件夹”卡片缩小至 3/4 🌟 ================= */
-.grid-view {
+/* 黄框位置固定的专属 Kalyna OSINT Logo 样式 */
+.static-yellow-box-logo {
+    height: 44px; /* 完美契合顶栏右侧下方视觉对齐线 */
+    width: auto;
+    object-fit: contain;
+    opacity: 0.95;
+    filter: drop-shadow(0px 2px 6px rgba(0,0,0,0.6));
+    margin-top: -5px; /* 轻微调整高度，使其与面包屑平齐且不占位 */
+}
+
+
+/* ================= 🌟 主页面分类板块结构 (强制换行) 🌟 ================= */
+.category-section {
+    width: 100%;
+    margin-bottom: 35px; /* 分类与分类之间的开阔空隙 */
+}
+
+/* 分类标题样式 */
+.category-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--pale-skin);
+    margin-bottom: 15px;
+    padding-left: 8px;
+    border-left: 3px solid var(--pale-skin);
+    letter-spacing: 1px;
+}
+
+/* 分类下的“文件夹”网格流 (保持大小缩小至原来的 3/4) */
+.category-grid {
     display: grid;
     /* 原基础宽度大约为 360px，按 3/4 调整至 270px 进行自适应栅格排列 */
     grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-    gap: 18px; /* 间距等比例稍微收紧 */
+    gap: 18px; 
 }
 
 .front-card {
@@ -159,7 +197,7 @@ body {
     height: 100%;
     object-fit: cover;
     
-    /* ⚡ 性能优化核心：限制纹理缓冲大小，强制低分辨率光栅化渲染，极大地提升网页滚动流畅度 */
+    /* ⚡ 性能优化核心：限制纹理缓冲大小，强制低分辨率光栅化渲染 */
     max-width: 400px; 
     max-height: 250px;
     image-rendering: -webkit-optimize-contrast;
@@ -168,32 +206,19 @@ body {
 
 /* 卡片内部字体大小等比例收缩 3/4 */
 .card-info { padding: 12px; text-align: center; }
-.card-info h3 { font-size: 15px; margin-bottom: 4px; letter-spacing: 1px; }
-.card-info p { font-size: 11px; color: var(--text-muted); }
+.card-info h3 { font-size: 14px; margin-bottom: 6px; letter-spacing: 1px; line-height: 1.3; }
+.card-info p { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
 
-/* ================= 详情看板与右上角 Logo 锚点 ================= */
+
+/* ================= 详情看板样式 ================= */
 .control-header {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* 撑开返回按钮与右边的 Logo */
     margin-bottom: 20px;
     width: 100%;
 }
 
-.title-with-logo-wp {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-/* 显示栏右上角的 Kalyna OSINT 浮动 Logo 视觉样式 */
-.front-floating-logo {
-    height: 40px; /* 控制图标高度，高度对齐标题字 */
-    width: auto;
-    object-fit: contain;
-    opacity: 0.9;
-    filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.5));
-}
+.current-front-title { font-size: 22px; border-left: 4px solid var(--pale-skin); padding-left: 12px; }
 
 .back-btn {
     background-color: var(--card-bg);
@@ -204,9 +229,9 @@ body {
     font-weight: bold;
     cursor: pointer;
     border-radius: 4px;
+    margin-right: 20px;
 }
 .back-btn:hover { background-color: var(--pale-skin); color: var(--prussian-blue); }
-.current-front-title { font-size: 22px; border-left: 4px solid var(--pale-skin); padding-left: 12px; }
 
 .main-lightbox {
     display: flex;
@@ -233,7 +258,7 @@ body {
     cursor: zoom-in;
 }
 
-/* 中间看图的核心大图保持最高清晰度渲染 */
+/* 中心大图保持完整清晰度 */
 .viewer-window img {
     max-width: 100%;
     max-height: 100%;
@@ -272,6 +297,7 @@ body {
 }
 .arrow-btn:hover { background-color: var(--pale-skin); color: var(--prussian-blue); }
 
+
 /* ================= 放映区全放大模式状态转换 ================= */
 body.max-zoom-mode { overflow: hidden; }
 body.max-zoom-mode .wrapper { max-width: 100vw !important; padding: 0 !important; }
@@ -281,7 +307,8 @@ body.max-zoom-mode .main-lightbox {
 body.max-zoom-mode .viewer-window { height: 100vh; border-radius: 0; }
 body.max-zoom-mode .viewer-window img { max-width: 98vw; max-height: 98vh; }
 
-/* ================= 🌟 底部放映时间轴轨道与分辨率降级 🌟 ================= */
+
+/* ================= 底部放映时间轴轨道与分辨率降级 ================= */
 .gallery-timeline-wrapper {
     margin-top: 20px;
     display: flex;
@@ -316,12 +343,11 @@ body.max-zoom-mode .viewer-window img { max-width: 98vw; max-height: 98vh; }
     opacity: 0.6;
 }
 
-/* ⚡ 性能优化核心：限制下排历史轨道缩略图的内部渲染尺寸 */
+/* ⚡ 性能优化核心：限制下排历史轨道缩略图的内部渲染尺寸与解码质量 */
 .thumb-item img { 
     width: 100%; 
     height: 100%; 
     object-fit: cover; 
-    
     max-width: 150px;
     max-height: 100px;
     image-rendering: low-quality;
