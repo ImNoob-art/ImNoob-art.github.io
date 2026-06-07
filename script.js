@@ -16,13 +16,13 @@ const mapProjectData = [
                 id: "donbas",
                 name: "顿涅茨克",
                 desc: "顿涅茨克防御动态。",
-                history: ["2026-6-1", "2026-1-1"]
+                history: ["2026-6-1", "2026-1-1","2025-9-3"]
             },
             {
                 id: "south",
                 name: "南方",
                 desc: "扎波罗热和第聂伯罗比得罗夫斯克(亚历山德里夫卡)的局势动态。",
-                history: ["2026-6-1","2026-1-1" ]
+                history: ["2026-6-1","2026-1-1","2025-11-1" ]
             }
         ]
     },
@@ -76,7 +76,7 @@ const mapProjectData = [
                 id: "Kostiantynivka",
                 name: "康斯坦丁尼夫卡",
                 desc: "不定期更新的康斯坦丁尼夫卡方向态势图。",
-                history: ["2026-6-5"]
+                history: ["2026-6-7","2026-6-5"]
             },
             {
                 id: "Oleksandrivka",
