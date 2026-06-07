@@ -1,169 +1,118 @@
-
-// ================= 1. 分类基础配置（保持你的分类名称） =================
+// ================= 1. 分类模组专属数据结构 =================
+// 已转换为高级分组配置模板，支持通过给分类名称(category)赋值，将文件夹动态渲染至不同行
 const mapProjectData = [
     {
-        id: "north",
-        name: "北方",
-        desc: "哈尔科夫及周边边界区域最新战势跟踪图。",
-        history: [
-            "2026-6-1",
-            "2026-5-1",
-            "2026-4-1",
-            "2026-3-1",
-            "2026-2-1",
-            "2026-1-1",
-            "2025-12-1",
-            "2025-11-1",
-            "2025-10-1",
-            "2025-9-3"
+        category: "总体态势",
+        items: [
+            {
+                id: "north",
+                name: "北方",
+                desc: "哈尔科夫及周边边界区域最新战势跟踪图。",
+                history: ["2026-6-1", "2026-5-1", "2026-4-1", "2026-3-1", "2026-2-1", "2026-1-1",
+                          "2025-12-1", "2025-11-1", "2025-10-1", "2025-9-3"]
+            },
+            {
+                id: "donbas",
+                name: "顿涅茨克",
+                desc: "顿涅茨克防御动态。",
+                history: ["2026-6-4", "2026-6-3", "2026-5-30"]
+            },
+            {
+                id: "south",
+                name: "南方",
+                desc: "扎波罗热和第聂伯罗比得罗夫斯克(亚历山德里夫卡)的局势动态。",
+                history: ["2026-6-4", "2026-6-3", "2026-5-30"]
+            }
         ]
     },
     {
-        id: "donbas",
-        name: "顿涅茨克",
-        desc: "顿涅茨克防御动态。",
-        history: [
-            "2026-6-4",
-            "2026-6-3",
-            "2026-5-30"
-        ]
-    },
-        {
-        id: "south",
-        name: "南方",
-        desc: "扎波罗热和第聂伯罗比得罗夫斯克(亚历山德里夫卡)的局势动态。",
-        history: [
-            "2026-6-4",
-            "2026-6-3",
-            "2026-5-30"
-        ]
-    },
-    {
-        id: "xiao",
-        name: "兵力密度 俄乌 (5km)",
-        desc: "俄乌两军兵力密度图,单位格子长度为5km。",
-        history: [
-            "2026-6-4",
-            "2026-6-1",
-            "2026-5-29",
-            "2026-5-16",
-            "2026-4-18",
-            "2026-3-16",
-            "2026-2-27",
-            "2026-2-2" // 历史起点
-        ]
-    },
-    {
-        id: "zhong",
-        name: "兵力密度 俄乌 (10km)",
-        desc: "俄乌两军兵力密度图,单位格子长度为10km。图中俄乌双方格子会出现叠加的情况具体内容请看对应方的具体情况",
-        history: [
-            "2026-6-4",
-            "2026-6-1",
-            "2026-5-29",
-            "2026-5-16",
-            "2026-4-18",
-            "2026-3-16",
-            "2026-2-27",
-            "2026-2-2" // 历史起点
+        category: "密度",
+        items: [
+            {
+                id: "xiao",
+                name: "兵力密度 俄乌 (5km)",
+                desc: "俄乌两军兵力密度图,单位格子长度为5km。",
+                history: ["2026-6-4", "2026-6-1", "2026-5-29", "2026-5-16", "2026-4-18", "2026-3-16", "2026-2-27", "2026-2-2"]
+            },
+            {
+                id: "zhong",
+                name: "兵力密度 俄乌 (10km)",
+                desc: "俄乌两军兵力密度图,单位格子长度为10km。图中俄乌双方格子会出现叠加的情况具体内容请看对应方的具体情况",
+                history: ["2026-6-4", "2026-6-1", "2026-5-29", "2026-5-16", "2026-4-18", "2026-3-16", "2026-2-27", "2026-2-2"]
+            },
+            {
+                id: "RUzhong",
+                name: "兵力密度 俄军 (10km)",
+                desc: "俄军兵力密度图,单位格子长度为10km。",
+                history: ["2026-6-4", "2026-6-1", "2026-5-29", "2026-5-16", "2026-4-18", "2026-3-16", "2026-2-27", "2026-2-2"]
+            },
+            {
+                id: "RUfull",
+                name: "兵力密度 俄军 (full)",
+                desc: "每月更新的俄军兵力密度图,单位格子长度为10km。",
+                history: ["2026-6-1", "2026-5-16", "2025-1-1", "2024-10-1", "2024-8-1", "2024-6-1", "2024-1-1"]
+            },
+            {
+                id: "UAzhong",
+                name: "兵力密度 乌军 (10km)",
+                desc: "乌军兵力密度图,单位格子长度为10km。",
+                history: ["2026-6-4", "2026-6-1", "2026-5-29", "2026-5-16", "2026-4-18", "2026-3-16", "2026-2-27", "2026-2-2"]
+            },
+            {
+                id: "UAfull",
+                name: "兵力密度 乌军 (full)",
+                desc: "每月更新的乌军兵力密度图,单位格子长度为10km。",
+                history: ["2026-6-1", "2026-5-1", "2026-4-1", "2026-3-1"]
+            }
         ]
     },
     {
-        id: "RUzhong",
-        name: "兵力密度 俄军 (10km)",
-        desc: "俄军兵力密度图,单位格子长度为10km。",
-        history: [
-            "2026-6-4",
-            "2026-6-1",
-            "2026-5-29",
-            "2026-5-16",
-            "2026-4-18",
-            "2026-3-16",
-            "2026-2-27",
-            "2026-2-2" // 历史起点
+        category: "具体前线",
+        items: [
+            {
+                id: "Kostiantynivka",
+                name: "康斯坦丁尼夫卡",
+                desc: "不定期更新的康斯坦丁尼夫卡方向态势图。",
+                history: ["2026-6-5"]
+            },
+            {
+                id: "Oleksandrivka",
+                name: "亚历山德里夫卡",
+                desc: "或叫第聂伯罗比得罗夫斯克方向。不定期更新该方向的局势。",
+                history: ["2026-6-5"]
+            },
+            {
+                id: "Zaporizhzhia",
+                name: "扎波罗热",
+                desc: "扎波罗热州战场态势图。不定期更新该方向的局势。",
+                history: ["2026-6-5"]
+            },
+            {
+                id: "Lab1",
+                name: "地图实验室",
+                desc: "包括显示风格和数据处理等方面的内容",
+                history: ["2026-6-6", "2026-3-24"]
+            }
         ]
     },
     {
-        id: "RUfull",
-        name: "兵力密度 俄军 (full)",
-        desc: "每月更新的俄军兵力密度图,单位格子长度为10km。",
-        history: [
-            "2026-6-1",
-            "2026-5-16",
-            "2025-1-1",
-            "2024-10-1",
-            "2024-8-1",
-            "2024-6-1",
-            "2024-1-1" // 历史起点
-            
+        category: "地图实验室",
+        items: [
+            {
+                id: "Lab1",
+                name: "风格",
+                desc: "包括显示风格和数据处理等方面的内容",
+                history: ["2026-6-6", "2026-3-24"]
+            }
         ]
-    },
-    {
-        id: "UAzhong",
-        name: "兵力密度 乌军 (10km)",
-        desc: "乌军兵力密度图,单位格子长度为10km。",
-        history: [
-            "2026-6-4",
-            "2026-6-1",
-            "2026-5-29",
-            "2026-5-16",
-            "2026-4-18",
-            "2026-3-16",
-            "2026-2-27",
-            "2026-2-2" // 历史起点
-        ]
-    },
-     {
-        id: "UAfull",
-        name: "兵力密度 乌军 (full)",
-        desc: "每月更新的乌军兵力密度图,单位格子长度为10km。",
-        history: [
-            "2026-6-1",
-            "2026-5-1",
-            "2026-4-1",
-            "2026-3-1" // 历史起点
-        ]
-    },
-    {
-        id: "Kostiantynivka",
-        name: "康斯坦丁尼夫卡",
-        desc: "不定期更新的康斯坦丁尼夫卡方向态势图。",
-        history: [
-            "2026-6-5",// 历史起点
-        ]
-    },
-    {
-        id: "Oleksandrivka",
-        name: "亚历山德里夫卡",
-        desc: "或叫第聂伯罗比得罗夫斯克方向。不定期更新该方向的局势。",
-        history: [
-            "2026-6-5",// 历史起点
-        ]
-    },
-    {
-        id: "Zaporizhzhia",
-        name: "扎波罗热",
-        desc: "扎波罗热州战场态势图。不定期更新该方向的局势。",
-        history: [
-            "2026-6-5",// 历史起点
-        ]
-    },
-    {
-        id: "Lab1",
-        name: "地图实验室",
-        desc: "包括显示风格和数据处理等方面的内容",
-        history: [
-            "2026-6-6",
-            "2026-3-24",// 历史起点
-        ]
-    },
+    }
 ];
 
 // ================= 2. 状态控制池 =================
 let activeFront = null;        
 let activeMapIndex = 0;        
 
-// 缩放与拖拽物理引擎变量
+// 缩放与拖拽物理引擎
 let isMaxZoom = false; 
 let scale = 1;
 let isDragging = false;
@@ -183,7 +132,6 @@ const crumbHome = document.getElementById("crumbHome");
 const crumbSep = document.getElementById("crumbSep");
 const crumbDetail = document.getElementById("crumbDetail");
 
-// 交互节点
 const zoomWindow = document.getElementById("zoomWindow");
 const zoomToggleBtn = document.getElementById("zoomToggleBtn");
 
@@ -195,29 +143,50 @@ function init() {
     setupEventListeners();
 }
 
-// ================= 4. 渲染主网格 =================
+// ================= 4. 渲染主网格（支持按分类换行渲染） =================
 function renderGridHome() {
     gridView.innerHTML = "";
     crumbHome.classList.add("active");
     crumbSep.classList.add("hidden");
     crumbDetail.classList.add("hidden");
 
-    mapProjectData.forEach(front => {
-        const card = document.createElement("div");
-        card.className = "front-card";
-        const coverImgPath = front.history.length > 0 ? `maps/${front.id}/${front.history[0]}.jpeg` : "";
+    // 轮询大分类
+    mapProjectData.forEach(catBlock => {
+        // 创建分类容器板块
+        const catSection = document.createElement("section");
+        catSection.className = "category-section";
 
-        card.innerHTML = `
-            <div class="card-thumb-wp">
-                <img src="${coverImgPath}" alt="${front.name}" onerror="this.src='https://placehold.co/600x400/111416/8a949d?text=%E6%9A%82%E6%97%A0%E5%9C%B0%E5%9B%BE'">
-            </div>
-            <div class="card-info">
-                <h3>${front.name}</h3>
-                <p>${front.desc}</p>
-            </div>
-        `;
-        card.addEventListener("click", () => enterDetailView(front));
-        gridView.appendChild(card);
+        // 创建分类标题栏
+        const catTitle = document.createElement("h2");
+        catTitle.className = "category-title";
+        catTitle.textContent = catBlock.category;
+        catSection.appendChild(catTitle);
+
+        // 创建该分类下的卡片网格流
+        const catGrid = document.createElement("div");
+        catGrid.className = "category-grid";
+
+        // 填充属于当前大类的子文件夹
+        catBlock.items.forEach(front => {
+            const card = document.createElement("div");
+            card.className = "front-card";
+            const coverImgPath = front.history.length > 0 ? `maps/${front.id}/${front.history[0]}.jpeg` : "";
+
+            card.innerHTML = `
+                <div class="card-thumb-wp">
+                    <img src="${coverImgPath}" alt="${front.name}" onerror="this.src='https://placehold.co/600x400/111416/8a949d?text=%E6%9A%82%E6%97%A0%E5%9C%B0%E5%9B%BE'">
+                </div>
+                <div class="card-info">
+                    <h3>${front.name}</h3>
+                    <p>${front.desc}</p>
+                </div>
+            `;
+            card.addEventListener("click", () => enterDetailView(front));
+            catGrid.appendChild(card);
+        });
+
+        catSection.appendChild(catGrid);
+        gridView.appendChild(catSection);
     });
 }
 
@@ -246,7 +215,6 @@ function updateLightboxAndGallery() {
     const currentMapName = activeFront.history[activeMapIndex];
     mainMapViewer.src = `maps/${activeFront.id}/${currentMapName}.jpeg`;
     
-    // 每次换图时，重置缩放矩阵引擎
     resetZoomEngine();
 
     galleryTrack.innerHTML = "";
@@ -275,7 +243,7 @@ function updateTransformMatrix() {
     mainMapViewer.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
 }
 
-// ================= 8. 展开 / 取消放大核心逻辑切换 =================
+// ================= 8. 放大 / 取消放大核心逻辑切换 =================
 function toggleMaxZoomMode() {
     isMaxZoom = !isMaxZoom;
     
@@ -284,9 +252,9 @@ function toggleMaxZoomMode() {
         zoomWindow.classList.add("zoom-window-active");
         zoomToggleBtn.textContent = "❌ 双击取消放大";
         
-        // 全盘深度隐藏周围模块
+        // 深度放大模式：隐去一切周边外围视窗要素（包括顶部栏与右上角固定 Logo）
         document.getElementById("topBar").classList.add("hidden");
-        document.getElementById("breadcrumb").classList.add("hidden");
+        document.getElementById("wrapperHeaderZone").classList.add("hidden");
         document.getElementById("controlHeader").classList.add("hidden");
         document.getElementById("galleryWrapper").classList.add("hidden");
     } else {
@@ -295,7 +263,7 @@ function toggleMaxZoomMode() {
         zoomToggleBtn.textContent = "🔍 点击放大";
         
         document.getElementById("topBar").classList.remove("hidden");
-        document.getElementById("breadcrumb").classList.remove("hidden");
+        document.getElementById("wrapperHeaderZone").classList.remove("hidden");
         document.getElementById("controlHeader").classList.remove("hidden");
         document.getElementById("galleryWrapper").classList.remove("hidden");
         
@@ -333,7 +301,7 @@ function setupEventListeners() {
         }
     });
 
-    // 触发平铺放大切换
+    // 触发放大切换
     zoomWindow.addEventListener("click", (e) => {
         if (e.target.classList.contains('arrow-btn')) return;
         if (!isDragging) {
@@ -341,7 +309,7 @@ function setupEventListeners() {
         }
     });
 
-    // 鼠标滚轮无限镜效果
+    // 滚轮控制
     zoomWindow.addEventListener("wheel", (e) => {
         if (!isMaxZoom) return;
         e.preventDefault(); 
@@ -355,7 +323,7 @@ function setupEventListeners() {
         updateTransformMatrix();
     }, { passive: false });
 
-    // 鼠标左键任意抓取并拖拽
+    // 鼠标左键拖拽
     zoomWindow.addEventListener("mousedown", (e) => {
         if (!isMaxZoom) return;
         isDragging = true;
@@ -378,7 +346,7 @@ function setupEventListeners() {
         }
     });
 
-    // 底部横向移动
+    // 底部横向轨道按钮控制
     document.getElementById("scrollLeft").addEventListener("click", () => galleryTrack.scrollLeft -= 150);
     document.getElementById("scrollRight").addEventListener("click", () => galleryTrack.scrollLeft += 150);
 }
