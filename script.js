@@ -3,6 +3,7 @@
 const mapProjectData = [
     {
         category: "总体态势",
+        desc: "小比例尺下的战线演变，包含主要边界及关键战略方向的整体推移历史。",
         items: [
             {
                 id: "north",
@@ -26,7 +27,8 @@ const mapProjectData = [
         ]
     },
     {
-        category: "密度",
+        category: "兵力密度/兵力热力图",
+        desc: "这里是定量化兵力配置图，采用不同公里网格进行离散化兵力统计与叠加显示。你可以明显看出哪些区域是某一方的兵力集中重点哪些区域的兵力明显不足。",
         items: [
             {
                 id: "xiao",
@@ -68,6 +70,7 @@ const mapProjectData = [
     },
     {
         category: "具体前线",
+        desc: "在这里可以找到不同大比例尺下区域的具体地图，由于文件过大，这些地图无法展示在知乎内容中，因此单独展示出来。",
         items: [
             {
                 id: "Kostiantynivka",
@@ -91,11 +94,12 @@ const mapProjectData = [
     },
     {
         category: "地图实验室",
+        desc: "关于制图显示风格、自动化数据处理的测试沙盒。",
         items: [
             {
                 id: "Lab1",
                 name: "风格",
-                desc: "包括显示风格和数据处理等方面的内容",
+                desc: "不同的战线风格、乌军军团和指挥链的相关内容",
                 history: ["2026-6-6", "2026-3-24"]
             }
         ]
@@ -128,6 +132,7 @@ const crumbDetail = document.getElementById("crumbDetail");
 
 const zoomWindow = document.getElementById("zoomWindow");
 const zoomToggleBtn = document.getElementById("zoomToggleBtn");
+const siteGlobalIntro = document.getElementById("siteGlobalIntro");
 
 // ================= 3. 初始化 =================
 function init() {
@@ -137,30 +142,40 @@ function init() {
     setupEventListeners();
 }
 
-// ================= 4. 渲染主网格（支持按分类换行渲染） =================
+// ================= 4. 渲染主网格（完美整合分类简介排版） =================
 function renderGridHome() {
     gridView.innerHTML = "";
+    siteGlobalIntro.classList.remove("hidden"); // 显示主页全局公告栏
     crumbHome.classList.add("active");
     crumbSep.classList.add("hidden");
     crumbDetail.classList.add("hidden");
 
-    // 轮询大分类
     mapProjectData.forEach(catBlock => {
-        // 创建分类容器板块
         const catSection = document.createElement("section");
         catSection.className = "category-section";
 
-        // 创建分类标题栏
+        // 创建复合分类文本组容器
+        const headerGroup = document.createElement("div");
+        headerGroup.className = "category-header-group";
+
+        // 分类标题
         const catTitle = document.createElement("h2");
         catTitle.className = "category-title";
         catTitle.textContent = catBlock.category;
-        catSection.appendChild(catTitle);
+        headerGroup.appendChild(catTitle);
 
-        // 创建该分类下的卡片网格流
+        // 分类简介 (灰色偏白)
+        const catDesc = document.createElement("div");
+        catDesc.className = "category-desc";
+        catDesc.textContent = catBlock.desc;
+        headerGroup.appendChild(catDesc);
+
+        catSection.appendChild(headerGroup);
+
+        // 文件夹网格流
         const catGrid = document.createElement("div");
         catGrid.className = "category-grid";
 
-        // 填充属于当前大类的子文件夹
         catBlock.items.forEach(front => {
             const card = document.createElement("div");
             card.className = "front-card";
@@ -190,6 +205,7 @@ function enterDetailView(front) {
     activeMapIndex = 0; 
 
     gridView.classList.add("hidden");
+    siteGlobalIntro.classList.add("hidden"); // 切换时隐去网页全局简介栏
     detailView.classList.remove("hidden");
 
     crumbHome.classList.remove("active");
@@ -237,16 +253,16 @@ function updateTransformMatrix() {
     mainMapViewer.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
 }
 
-// ================= 8. 放大 / 取消放大核心逻辑切换 =================
+// ================= 8. 展开 / 取消放大核心逻辑切换 =================
 function toggleMaxZoomMode() {
     isMaxZoom = !isMaxZoom;
     
     if (isMaxZoom) {
         document.body.classList.add("max-zoom-mode");
         zoomWindow.classList.add("zoom-window-active");
-        zoomToggleBtn.textContent = "❌ 双击取消放大";
+        zoomToggleBtn.textContent = "❌ 取消放大";
         
-        // 深度放大模式：隐去一切周边外围视窗要素（包括顶部栏与右上角固定 Logo）
+        // 全画幅彻底隐藏所有多余的屏幕模块
         document.getElementById("topBar").classList.add("hidden");
         document.getElementById("wrapperHeaderZone").classList.add("hidden");
         document.getElementById("controlHeader").classList.add("hidden");
@@ -273,12 +289,11 @@ function returnToHome() {
     renderGridHome();
 }
 
-// ================= 9. 完整手势控制与系统级监听 =================
+// ================= 9. 手势控制监听 =================
 function setupEventListeners() {
     backBtn.addEventListener("click", returnToHome);
     crumbHome.addEventListener("click", returnToHome);
 
-    // 左右切图
     document.getElementById("prevMap").addEventListener("click", (e) => {
         e.stopPropagation();
         if (activeFront && activeMapIndex < activeFront.history.length - 1) {
@@ -295,7 +310,6 @@ function setupEventListeners() {
         }
     });
 
-    // 触发放大切换
     zoomWindow.addEventListener("click", (e) => {
         if (e.target.classList.contains('arrow-btn')) return;
         if (!isDragging) {
@@ -303,11 +317,9 @@ function setupEventListeners() {
         }
     });
 
-    // 滚轮控制
     zoomWindow.addEventListener("wheel", (e) => {
         if (!isMaxZoom) return;
         e.preventDefault(); 
-
         const zoomFactor = 0.15;
         if (e.deltaY < 0) {
             scale += zoomFactor; 
@@ -317,7 +329,6 @@ function setupEventListeners() {
         updateTransformMatrix();
     }, { passive: false });
 
-    // 鼠标左键拖拽
     zoomWindow.addEventListener("mousedown", (e) => {
         if (!isMaxZoom) return;
         isDragging = true;
@@ -340,7 +351,6 @@ function setupEventListeners() {
         }
     });
 
-    // 底部横向轨道按钮控制
     document.getElementById("scrollLeft").addEventListener("click", () => galleryTrack.scrollLeft -= 150);
     document.getElementById("scrollRight").addEventListener("click", () => galleryTrack.scrollLeft += 150);
 }
