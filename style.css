@@ -77,14 +77,13 @@ body {
     border-radius: 4px;
 }
 
-/* 外链双长方形按钮组包裹框 */
+/* 外链双长方形按钮组 */
 .header-links-group {
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-/* 统一的硬核白底黑字、上下粗黑边框样式 */
 .nav-link-rect {
     display: inline-block;
     background-color: #ffffff;
@@ -100,24 +99,21 @@ body {
     border-radius: 0px; 
     transition: background-color 0.2s;
 }
-
-.nav-link-rect:hover {
-    background-color: var(--pale-skin);
-}
+.nav-link-rect:hover { background-color: var(--pale-skin); }
 
 /* 主内容页面包裹流 */
 .wrapper {
     padding: 15px 30px 30px 30px;
     max-width: 1400px;
     margin: 0 auto;
-    position: relative; /* 为右上角 Logo 的绝对定位提供锚点参考 */
+    position: relative; 
 }
 
-/* ================= 🌟 统一区域头部与黄框处固定 Logo 🌟 ================= */
+/* 统一区域头部与黄框处固定 Logo */
 .wrapper-header-zone {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     margin-bottom: 22px;
     width: 100%;
 }
@@ -126,7 +122,6 @@ body {
 .breadcrumb {
     font-size: 15px;
     color: var(--text-muted);
-    margin-bottom: 0; /* 统合至父级布局中 */
 }
 .crumb-item { transition: color 0.2s; }
 .crumb-item#crumbHome { cursor: pointer; }
@@ -134,38 +129,74 @@ body {
 .crumb-item.active { color: var(--text-light); font-weight: bold; }
 .crumb-separator { margin: 0 8px; color: var(--text-muted); }
 
-/* 黄框位置固定的专属 Kalyna OSINT Logo 样式 */
+/* 🌟 Kalyna OSINT Logo 专属正方形白色防色差保护底面 🌟 */
+.logo-white-plate {
+    width: 50px;                 /* 略大于图标尺寸的正方形 */
+    height: 50px;
+    background-color: #ffffff;   /* 纯白底色，有效对比过滤深蓝色 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;          /* 极小微圆角防锋利剪切 */
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.4); /* 增加微立体阴影悬浮感 */
+}
+
 .static-yellow-box-logo {
-    height: 44px; /* 完美契合顶栏右侧下方视觉对齐线 */
+    height: 40px;                /* 图标缩略比例，留出白色外边缘 */
     width: auto;
     object-fit: contain;
-    opacity: 0.95;
-    filter: drop-shadow(0px 2px 6px rgba(0,0,0,0.6));
-    margin-top: -5px; /* 轻微调整高度，使其与面包屑平齐且不占位 */
 }
 
+/* ================= 🌟 主页面上方留白的全局简介公告栏 🌟 ================= */
+.site-global-intro {
+    width: 100%;
+    background-color: rgba(17, 20, 22, 0.4); /* 半透明集结框底色 */
+    border-left: 3px solid var(--prussian-blue);
+    padding: 15px 20px;
+    margin-bottom: 30px;
+    border-radius: 2px;
+    
+    /* 核心视觉约束 */
+    color: #ffffff;              /* 纯白色 */
+    font-size: 13px;             /* 大小与分类简介一致 */
+    line-height: 1.6;
+    text-indent: 2em;            /* 首行精密缩进 2 字符 */
+    text-align: justify;         /* 两端严谨对齐 */
+}
 
-/* ================= 🌟 主页面分类板块结构 (强制换行) 🌟 ================= */
+/* ================= 主页面分类板块结构 ================= */
 .category-section {
     width: 100%;
-    margin-bottom: 35px; /* 分类与分类之间的开阔空隙 */
+    margin-bottom: 40px; 
 }
 
-/* 分类标题样式 */
+/* 分类头部文本组（将标题与简介包装到一起） */
+.category-header-group {
+    margin-bottom: 16px;
+    padding-left: 8px;
+    border-left: 3px solid var(--pale-skin);
+}
+
+/* 分类名称 */
 .category-title {
     font-size: 18px;
     font-weight: bold;
     color: var(--pale-skin);
-    margin-bottom: 15px;
-    padding-left: 8px;
-    border-left: 3px solid var(--pale-skin);
     letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+/* 🌟 分类简介：字体大小小于分类名称，颜色为灰色偏白 🌟 */
+.category-desc {
+    font-size: 13px;
+    color: #bfbfbf;              /* 高级灰色偏白 */
+    font-weight: normal;
+    letter-spacing: 0.5px;
 }
 
 /* 分类下的“文件夹”网格流 (保持大小缩小至原来的 3/4) */
 .category-grid {
     display: grid;
-    /* 原基础宽度大约为 360px，按 3/4 调整至 270px 进行自适应栅格排列 */
     grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
     gap: 18px; 
 }
@@ -178,180 +209,58 @@ body {
     cursor: pointer;
     transition: transform 0.2s, border-color 0.2s;
 }
+.front-card:hover { transform: translateY(-3px); border-color: var(--pale-skin); }
 
-.front-card:hover {
-    transform: translateY(-3px);
-    border-color: var(--pale-skin);
-}
-
-/* 降低主页网格内缩略图渲染负荷 */
 .card-thumb-wp {
     width: 100%;
     aspect-ratio: 16 / 10;
     background-color: #0b0d0e;
     overflow: hidden;
 }
-
 .card-thumb-wp img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    
-    /* ⚡ 性能优化核心：限制纹理缓冲大小，强制低分辨率光栅化渲染 */
-    max-width: 400px; 
-    max-height: 250px;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: low-quality;
+    width: 100%; height: 100%; object-fit: cover;
+    max-width: 400px; max-height: 250px;
+    image-rendering: -webkit-optimize-contrast; image-rendering: low-quality;
 }
 
-/* 卡片内部字体大小等比例收缩 3/4 */
 .card-info { padding: 12px; text-align: center; }
 .card-info h3 { font-size: 14px; margin-bottom: 6px; letter-spacing: 1px; line-height: 1.3; }
 .card-info p { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
 
-
-/* ================= 详情看板样式 ================= */
-.control-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    width: 100%;
-}
-
+/* 详情看板样式 */
+.control-header { display: flex; align-items: center; margin-bottom: 20px; width: 100%; }
 .current-front-title { font-size: 22px; border-left: 4px solid var(--pale-skin); padding-left: 12px; }
-
 .back-btn {
-    background-color: var(--card-bg);
-    color: var(--text-light);
-    border: 1px solid var(--border-dark);
-    padding: 10px 20px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 4px;
-    margin-right: 20px;
+    background-color: var(--card-bg); color: var(--text-light); border: 1px solid var(--border-dark);
+    padding: 10px 20px; font-size: 14px; font-weight: bold; cursor: pointer; border-radius: 4px; margin-right: 20px;
 }
 .back-btn:hover { background-color: var(--pale-skin); color: var(--prussian-blue); }
 
 .main-lightbox {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-dark);
-    padding: 20px;
-    border-radius: 6px;
-    gap: 15px;
-    transition: all 0.3s ease;
+    display: flex; align-items: center; justify-content: space-between;
+    background-color: var(--card-bg); border: 1px solid var(--border-dark); padding: 20px; border-radius: 6px; gap: 15px; transition: all 0.3s ease;
 }
-
 .viewer-window {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #0b0d0e;
-    border-radius: 4px;
-    overflow: hidden;
-    position: relative;
-    height: 65vh;
-    cursor: zoom-in;
+    flex: 1; display: flex; justify-content: center; align-items: center; background-color: #0b0d0e; border-radius: 4px; overflow: hidden; position: relative; height: 65vh; cursor: zoom-in;
 }
-
-/* 中心大图保持完整清晰度 */
-.viewer-window img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    display: block;
-    transform-origin: center center;
-    transition: transform 0.1s ease-out;
-}
-
-.zoom-hint-tag {
-    position: absolute;
-    bottom: 15px;
-    right: 15px;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: var(--pale-skin);
-    padding: 8px 16px;
-    font-size: 13px;
-    font-weight: bold;
-    border-radius: 4px;
-    border: 1px solid rgba(255,255,255,0.2);
-    z-index: 10;
-    cursor: pointer;
-}
-
-.arrow-btn {
-    background-color: rgba(0,0,0,0.5);
-    color: var(--text-light);
-    border: 1px solid var(--border-dark);
-    font-size: 32px;
-    width: 50px;
-    height: 50px;
-    line-height: 46px;
-    cursor: pointer;
-    border-radius: 50%;
-    z-index: 5;
-}
+.viewer-window img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; transform-origin: center center; transition: transform 0.1s ease-out; }
+.zoom-hint-tag { position: absolute; bottom: 15px; right: 15px; background-color: rgba(0, 0, 0, 0.8); color: var(--pale-skin); padding: 8px 16px; font-size: 13px; font-weight: bold; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); z-index: 10; cursor: pointer; }
+.arrow-btn { background-color: rgba(0,0,0,0.5); color: var(--text-light); border: 1px solid var(--border-dark); font-size: 32px; width: 50px; height: 50px; line-height: 46px; cursor: pointer; border-radius: 50%; z-index: 5; }
 .arrow-btn:hover { background-color: var(--pale-skin); color: var(--prussian-blue); }
 
-
-/* ================= 放映区全放大模式状态转换 ================= */
+/* 放映区全放大模式状态转换 */
 body.max-zoom-mode { overflow: hidden; }
 body.max-zoom-mode .wrapper { max-width: 100vw !important; padding: 0 !important; }
-body.max-zoom-mode .main-lightbox {
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1500; padding: 0; border: none; border-radius: 0; background-color: #0b0d0e;
-}
+body.max-zoom-mode .main-lightbox { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1500; padding: 0; border: none; border-radius: 0; background-color: #0b0d0e; }
 body.max-zoom-mode .viewer-window { height: 100vh; border-radius: 0; }
 body.max-zoom-mode .viewer-window img { max-width: 98vw; max-height: 98vh; }
 
-
-/* ================= 底部放映时间轴轨道与分辨率降级 ================= */
-.gallery-timeline-wrapper {
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-dark);
-    padding: 10px;
-    border-radius: 6px;
-    gap: 10px;
-}
-
-.gallery-track {
-    flex: 1;
-    display: flex;
-    gap: 10px;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-}
-
+/* 底部放映时间轴轨道与分辨率降级 */
+.gallery-timeline-wrapper { margin-top: 20px; display: flex; align-items: center; background-color: var(--card-bg); border: 1px solid var(--border-dark); padding: 10px; border-radius: 6px; gap: 10px; }
+.gallery-track { flex: 1; display: flex; gap: 10px; overflow-x: auto; scroll-behavior: smooth; }
 .gallery-track::-webkit-scrollbar { height: 6px; }
 .gallery-track::-webkit-scrollbar-thumb { background: var(--border-dark); border-radius: 3px; }
-
-/* 历史缩略图项大小 */
-.thumb-item {
-    width: 120px;
-    aspect-ratio: 16 / 10;
-    flex-shrink: 0;
-    border: 2px solid transparent;
-    cursor: pointer;
-    border-radius: 2px;
-    overflow: hidden;
-    opacity: 0.6;
-}
-
-/* ⚡ 性能优化核心：限制下排历史轨道缩略图的内部渲染尺寸与解码质量 */
-.thumb-item img { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-    max-width: 150px;
-    max-height: 100px;
-    image-rendering: low-quality;
-}
-
+.thumb-item { width: 120px; aspect-ratio: 16 / 10; flex-shrink: 0; border: 2px solid transparent; cursor: pointer; border-radius: 2px; overflow: hidden; opacity: 0.6; }
+.thumb-item img { width: 100%; height: 100%; object-fit: cover; max-width: 150px; max-height: 100px; image-rendering: low-quality; }
 .thumb-item:hover, .thumb-item.active { opacity: 1; border-color: var(--pale-skin); }
 .gallery-scroll-btn { background: none; border: none; color: var(--text-light); font-size: 24px; cursor: pointer; padding: 0 5px; }
