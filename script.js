@@ -80,7 +80,7 @@ const mapProjectData = [
                 id: "Kostiantynivka",
                 name: "康斯坦丁尼夫卡",
                 desc: "不定期更新的康斯坦丁尼夫卡方向态势图。",
-                history: ["2026-6-7","2026-6-5"]
+                history: ["2026-6-12","2026-6-7","2026-6-5"]
             },
             {
                 id: "Oleksandrivka",
@@ -110,7 +110,7 @@ const mapProjectData = [
                 id: "Lab1",
                 name: "风格",
                 desc: "不同的战线风格、乌军军团和指挥链的相关内容",
-                history: ["2026-6-6", "2026-3-24"]
+                history: ["2026-6-8","2026-6-7","2026-6-6", "2026-3-24"]
             }
         ]
     }
