@@ -86,13 +86,13 @@ const mapProjectData = [
                 id: "Oleksandrivka",
                 name: "亚历山德里夫卡",
                 desc: "或叫第聂伯罗比得罗夫斯克方向。不定期更新该方向的局势。",
-                history: ["2026-6-5"]
+                history: ["2026-6-12", "2026-6-5"]
             },
             {
                 id: "Zaporizhzhia",
                 name: "扎波罗热",
                 desc: "扎波罗热州战场态势图。不定期更新该方向的局势。",
-                history: ["2026-6-5", "2026-6-11"]
+                history: ["2026-6-11", "2026-6-5"]
             },
             {
                 id: "Lyman",
