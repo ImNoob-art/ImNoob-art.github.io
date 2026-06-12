@@ -270,7 +270,7 @@ function toggleMaxZoomMode() {
     if (isMaxZoom) {
         document.body.classList.add("max-zoom-mode");
         zoomWindow.classList.add("zoom-window-active");
-        zoomToggleBtn.textContent = "❌ 双击取消放大";
+        zoomToggleBtn.textContent = "❌ 取消放大";
         
         // 全画幅彻底隐藏所有多余的屏幕模块
         document.getElementById("topBar").classList.add("hidden");
