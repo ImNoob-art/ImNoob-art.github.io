@@ -114,7 +114,7 @@ const mapProjectData = [
                 id: "Kupiansk",
                 name: "库普扬斯克",
                 desc: "库普扬斯克周边战场态势图。不定期更新该方向的局势。",
-                history: ["2026-6-26"]
+                history: ["2026-7-1", "2026-6-26"]
             },
         ]
     },
