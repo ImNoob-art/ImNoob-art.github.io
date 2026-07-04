@@ -84,7 +84,7 @@ const mapProjectData = [
     },
     {
         category: "具体前线",
-        desc: "在这里可以找到不同的大比例尺区域下的具体地图，由于文件过大，这些地图无法展示在知乎内容中，因此设立了此板块。",
+        desc: "在这里可以找到不同的大比例尺区域下的具体地图.",
         items: [
             {
                 id: "Kostiantynivka",
