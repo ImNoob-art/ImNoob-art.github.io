@@ -61,11 +61,28 @@ body {
     gap: 20px;            
 }
 
+/* 标题外层容器 */
 .site-title {
-    font-family: "STYaoti", "华文姚体", "SimSun", serif;
-    font-size: 26px;
+    font-size: 28px;         /* 适当微调字号以凸显 Agency FB 瘦长字体的张力 */
+    display: inline-flex;
+    align-items: baseline;   /* 确保中英文底部对齐 */
+}
+
+/* 英文部分：Agency FB 粗体，颜色为 #FF6100 */
+.site-title .title-en {
+    font-family: "Agency FB", Impact, sans-serif; /* 降级备用 Impact 确保瘦长感 */
     font-weight: bold;
-    letter-spacing: 2px;
+    color: #FF6100;
+    letter-spacing: 1px;     /* 英文采用稍紧凑的间距 */
+}
+
+/* 中文部分：华文姚体 粗体 */
+.site-title .title-zh {
+    font-family: "STYaoti", "华文姚体", "SimSun", serif;
+    font-weight: bold;
+    color: #ffffff;          /* 保持高对比度的纯白色 */
+    letter-spacing: 2px;     /* 保持原有汉字的开阔间距 */
+    margin-left: 2px;        /* 中英文之间微小的呼吸留白 */
 }
 
 .live-date {
