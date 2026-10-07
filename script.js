@@ -139,7 +139,7 @@ const mapProjectData = [
                 id: "Sumy",
                 name: "苏梅市",
                 desc: "苏梅市北部和东部边境地区，8军下属的库尔斯克集群和18军部署在苏梅市北部，14军团部署在东部。不定期更新该方向的局势。",
-                history: ["2026-7-2"]
+                history: ["2026-10-7", "2026-7-2"]
             },
             {
                 id: "VelykyiBurluk",
